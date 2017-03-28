@@ -1,0 +1,5 @@
+C:\projects\zimbra\ZimbraCSharpClient\bin\Debug\Zimbra.Client.dll
+C:\projects\zimbra\ZimbraCSharpClient\bin\Debug\Zimbra.Client.pdb
+C:\projects\zimbra\ZimbraCSharpClient\obj\Debug\Zimbra.Client.csprojResolveAssemblyReference.cache
+C:\projects\zimbra\ZimbraCSharpClient\obj\Debug\Zimbra.Client.dll
+C:\projects\zimbra\ZimbraCSharpClient\obj\Debug\Zimbra.Client.pdb
