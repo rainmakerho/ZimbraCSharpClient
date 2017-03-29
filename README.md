@@ -9,9 +9,10 @@
 | ------ | ------ | ------ |
 | SearchCalendarResourcesRequest | 找資源，例如會議室、車子 ... | Account |
 | GetWorkingHoursRequest | GetWorkingHoursRequest | Mail |
-
+| GetFreeBusy | 取得每個人的Free or Busy 時間 | Mail |
  
 - zimbraClientTest 為測試 Demo 的專案
 
 參考資訊
 [ZimbraTM SOAP API Reference 8.0.0_GA_5424](https://files.zimbra.com/docs/soap_api/8.0/soapapi-zimbra-doc/api-reference/overview-summary.html)
+[Zimbra Toaster](https://sourceforge.net/projects/zimbratoaster/files/Windows/)
