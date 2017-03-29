@@ -6,3 +6,11 @@ C:\projects\zimbra\zimbraClientTest\bin\Debug\Zimbra.Client.pdb
 C:\projects\zimbra\zimbraClientTest\obj\Debug\zimbraClientTest.csprojResolveAssemblyReference.cache
 C:\projects\zimbra\zimbraClientTest\obj\Debug\zimbraClientTest.exe
 C:\projects\zimbra\zimbraClientTest\obj\Debug\zimbraClientTest.pdb
+C:\projects\ZimbraCSharpClient\zimbraClientTest\bin\Debug\zimbraClientTest.exe.config
+C:\projects\ZimbraCSharpClient\zimbraClientTest\bin\Debug\zimbraClientTest.exe
+C:\projects\ZimbraCSharpClient\zimbraClientTest\bin\Debug\zimbraClientTest.pdb
+C:\projects\ZimbraCSharpClient\zimbraClientTest\bin\Debug\Zimbra.Client.dll
+C:\projects\ZimbraCSharpClient\zimbraClientTest\bin\Debug\Zimbra.Client.pdb
+C:\projects\ZimbraCSharpClient\zimbraClientTest\obj\Debug\zimbraClientTest.csprojResolveAssemblyReference.cache
+C:\projects\ZimbraCSharpClient\zimbraClientTest\obj\Debug\zimbraClientTest.exe
+C:\projects\ZimbraCSharpClient\zimbraClientTest\obj\Debug\zimbraClientTest.pdb

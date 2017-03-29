@@ -56,6 +56,18 @@ namespace Zimbra.Client.src.Mail
 
         public override Response NewResponse(XmlNode responseNode)
         {
+            var workinghours = WorkinghoursUtil.ParseNodeInfo2Workinghours(responseNode);
+            return new GetWorkingHoursResponse(workinghours);
+        }
+
+
+        
+    }
+
+    public class WorkinghoursUtil
+    {
+        public static Workinghours ParseNodeInfo2Workinghours(XmlNode responseNode)
+        {
             var workinghours = new Workinghours();
             var usrNodes = responseNode.SelectNodes(MailService.NS_PREFIX + ":" + MailService.E_USR, XmlUtil.NamespaceManager);
             foreach (XmlNode usrNode in usrNodes)
@@ -71,8 +83,22 @@ namespace Zimbra.Client.src.Mail
                     String e = XmlUtil.AttributeValue(iNode.Attributes, MailService.A_END);
                     seconds = Int64.Parse(e);
                     DateTime end = DateUtil.GmtSecondsToLocalTime(seconds);
-                    usr.Fs.Add(new F{s=start, e=end});
+                    usr.Fs.Add(new Duration { s = start, e = end });
                 }
+
+                var usrBNodes = usrNode.SelectNodes(MailService.NS_PREFIX + ":" + MailService.E_B, XmlUtil.NamespaceManager);
+                for (int i = 0; i < usrBNodes.Count; i++)
+                {
+                    XmlNode iNode = usrBNodes.Item(i);
+                    String s = XmlUtil.AttributeValue(iNode.Attributes, MailService.A_START);
+                    Int64 seconds = Int64.Parse(s);
+                    DateTime start = DateUtil.GmtSecondsToLocalTime(seconds);
+                    String e = XmlUtil.AttributeValue(iNode.Attributes, MailService.A_END);
+                    seconds = Int64.Parse(e);
+                    DateTime end = DateUtil.GmtSecondsToLocalTime(seconds);
+                    usr.Bs.Add(new Duration { s = start, e = end });
+                }
+
                 var usrUNodes = usrNode.SelectNodes(MailService.NS_PREFIX + ":" + MailService.E_U, XmlUtil.NamespaceManager);
                 for (int i = 0; i < usrUNodes.Count; i++)
                 {
@@ -83,16 +109,13 @@ namespace Zimbra.Client.src.Mail
                     String e = XmlUtil.AttributeValue(iNode.Attributes, MailService.A_END);
                     seconds = Int64.Parse(e);
                     DateTime end = DateUtil.GmtSecondsToLocalTime(seconds);
-                    usr.Us.Add(new U { s = start, e = end });
+                    usr.Us.Add(new Duration { s = start, e = end });
                 }
                 workinghours.Users.Add(usr);
             }
-             
-            return new GetWorkingHoursResponse(workinghours);
+            return workinghours;
         }
     }
-
-
 
 
     public class Workinghours
@@ -108,26 +131,24 @@ namespace Zimbra.Client.src.Mail
     {
 
         public string id { get; set; }
-        public IList<U> Us { get; set; }
-        public IList<F> Fs { get; set; }
+        public IList<Duration> Us { get; set; }
+        public IList<Duration> Fs { get; set; }
+
+        public IList<Duration> Bs { get; set; }
 
         public Usr(string id)
         {
             this.id = id;
-            this.Us = new List<U>();
-            this.Fs = new List<F>();
+            this.Us = new List<Duration>();
+            this.Fs = new List<Duration>();
+            this.Bs = new List<Duration>();
         }
     }
 
-    public class U
+    public class Duration
     {
         public DateTime s { get; set; }
         public DateTime e { get; set; }
     }
-
-    public class F
-    {
-        public DateTime s { get; set; }
-        public DateTime e { get; set; }
-    }
+ 
 }

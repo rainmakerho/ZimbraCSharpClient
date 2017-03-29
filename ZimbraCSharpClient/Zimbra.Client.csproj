@@ -107,6 +107,7 @@
     <Compile Include="src\Mail\GetFolder.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="src\Mail\GetFreeBusy.cs" />
     <Compile Include="src\Mail\GetMsg.cs">
       <SubType>Code</SubType>
     </Compile>

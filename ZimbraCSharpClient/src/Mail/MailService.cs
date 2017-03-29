@@ -48,7 +48,8 @@ namespace Zimbra.Client.Mail
 
         //add by rainmaker_ho@gss.com.tw
         public static String GET_WORKINGHOURS_REQUEST = "GetWorkingHoursRequest";
-        
+        public static String GET_FREE_BUSY_REQUEST = "GetFreeBusyRequest";
+
         //responses
         public static String GET_FOLDER_RESPONSE			= "GetFolderResponse";
 		public static String GET_TAG_RESPONSE				= "GetTagResponse";
@@ -62,7 +63,8 @@ namespace Zimbra.Client.Mail
 
         //add by rainmaker_ho@gss.com.tw
         public static String GET_WORKINGHOURS_RESPONSE = "GetWorkingHoursResponse";
-        
+        public static String GET_FREE_BUSY_RESPONSE = "GetFreeBusyResponse";
+
 
         //elements
         public static String E_FOLDER						= "folder";
@@ -77,7 +79,7 @@ namespace Zimbra.Client.Mail
 	    public static string E_USR = "usr";
         public static string E_F = "f";
         public static string E_U = "u";
-	    
+        public static string E_B = "b";
 
 
         //attributes
@@ -121,6 +123,7 @@ namespace Zimbra.Client.Mail
 			new MsgActionResponse(), 
             new GetWorkingHoursResponse(), 
             new SearchCalendarResourcesResponse(), 
+            new GetFreeBusyResponse()
         };
 
 		//IZimbraService

@@ -12,3 +12,6 @@
 
  
 - zimbraClientTest 為測試 Demo 的專案
+
+參考資訊
+[ZimbraTM SOAP API Reference 8.0.0_GA_5424](https://files.zimbra.com/docs/soap_api/8.0/soapapi-zimbra-doc/api-reference/overview-summary.html)
