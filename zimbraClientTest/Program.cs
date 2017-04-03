@@ -19,14 +19,12 @@ namespace zimbraClientTest
         private static RequestEnvelope _ZmailRequest;
         static void Main(string[] args)
         {
-            //var d1 = DateUtil.GmtSecondsToLocalTime(1490457600000 );
-            //var d2 = DateUtil.GmtSecondsToLocalTime(1491062400000);
             //設定連接的Server
             InitDispatcher();
 
             //透過使用者帳密，取回Token
             var userId = "rm@gss.com.tw";
-            var pwd = "your account";
+            var pwd = "your zimbra pwd";
             GetToken(userId, pwd);
 
             //_ZmailRequest.ApiRequest = new GetFolderRequest();
@@ -35,17 +33,18 @@ namespace zimbraClientTest
             //get workinghours
             //var start = new DateTime(2017, 3, 28);
             //var end = new DateTime(2017, 3, 29);
-            //var searchNames = "sky_wu@gss.com.tw,rainmaker_ho@gss.com.tw";
+            //var searchNames = "sk@gss.com.tw,ra@gss.com.tw";
             //_ZmailRequest.ApiRequest = new GetWorkingHoursRequest(start, end, searchNames);
             //var zResquest = _ZmailDispatcher.SendRequest(_ZmailRequest);
 
 
             //get Free or Busy
-            var start = new DateTime(2017, 3, 28, 8, 0, 0);
-            var end = new DateTime(2017, 3, 29, 20, 0, 0);
-            var searchNames = "rainmaker_ho@gss.com.tw";
-            _ZmailRequest.ApiRequest = new GetFreeBusyRequest(start, end, searchNames);
-            var zResquest = _ZmailDispatcher.SendRequest(_ZmailRequest);
+            //var start = new DateTime(2017, 3, 28, 8, 0, 0);
+            //var end = new DateTime(2017, 3, 29, 20, 0, 0);
+            //var searchNames = "rainmaker_ho@gss.com.tw";
+            //_ZmailRequest.ApiRequest = new GetFreeBusyRequest(start, end, searchNames);
+            //var zResquest = _ZmailDispatcher.SendRequest(_ZmailRequest);
+
 
 
             //取得會議室
@@ -60,6 +59,28 @@ namespace zimbraClientTest
             //};
             //_ZmailRequest.ApiRequest = searchMeetingRooms;
             //var zResquest = _ZmailDispatcher.SendRequest(_ZmailRequest);
+
+
+            //訂會議
+            var app = new Appointment();
+            app.Subject = "RM 測試主旨";
+            app.Body = @"這是Body
+行一
+行2
+行3
+            ";
+            app.StartDate = new DateTime(2017, 4, 3, 15, 0, 0);
+            app.EndDate = new DateTime(2017, 4, 3, 15, 30, 0);
+            app.Organizer = new Attendee { Email = "rainmaker@gss.com.tw", DisplayName = "Rainmaker Ho" };
+            app.Location = new Attendee { Email = "room_xz@gss.com.tw", DisplayName = "舞蝶館" };
+            app.Attendees = new List<Attendee>()
+            {
+                new Attendee {Email = "alice@gss.com.tw", DisplayName = "Alice Lai"}
+            };
+
+            _ZmailRequest.ApiRequest = new CreateAppointmentRequest(app);
+            var zResquest = _ZmailDispatcher.SendRequest(_ZmailRequest);
+
         }
 
         static void InitDispatcher()

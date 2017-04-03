@@ -49,6 +49,8 @@ namespace Zimbra.Client.Mail
         //add by rainmaker_ho@gss.com.tw
         public static String GET_WORKINGHOURS_REQUEST = "GetWorkingHoursRequest";
         public static String GET_FREE_BUSY_REQUEST = "GetFreeBusyRequest";
+        public static string CREATE_APPT_REQUEST = "CreateAppointmentRequest";
+
 
         //responses
         public static String GET_FOLDER_RESPONSE			= "GetFolderResponse";
@@ -64,6 +66,7 @@ namespace Zimbra.Client.Mail
         //add by rainmaker_ho@gss.com.tw
         public static String GET_WORKINGHOURS_RESPONSE = "GetWorkingHoursResponse";
         public static String GET_FREE_BUSY_RESPONSE = "GetFreeBusyResponse";
+	    public static string CREATE_APPT_RESPONSE = "CreateAppointmentResponse";
 
 
         //elements
@@ -80,6 +83,19 @@ namespace Zimbra.Client.Mail
         public static string E_F = "f";
         public static string E_U = "u";
         public static string E_B = "b";
+	    public static string E_INV = "inv";
+	    public static string E_COMP = "comp";
+        public static string E_ATTENDEES = "at";
+	    public static string E_START = "s";
+	    public static string E_END = "e";
+	    public static string E_ORGANIZER = "or";
+	    public static string E_ALARM = "alarm";
+	    public static string E_TRIGGER = "trigger";
+        public static string E_RELATIVE = "rel";
+	    public static string E_EMAIL = "e";
+	    public static string E_SUBJECT = "su";
+	    public static string E_MIME_PART = "mp";
+	    public static string E_CONTENT = "content";
 
 
         //attributes
@@ -108,8 +124,48 @@ namespace Zimbra.Client.Mail
 		public static String A_OP							= "op";
 
         //add by rainmaker
-       
-        
+	    public static string A_STATUS = "status";
+	    public static string A_FREE_BUSY_STATUS = "fb";
+	    public static string A_CLASS = "class";
+	    public static string A_APPT_ALLDAY = "allDay";
+	    public static string A_DRAFT = "draft";
+	    public static string A_TRANSP = "transp";
+	    
+	    public static string A_ROLE = "role";
+	    public static string A_PARTICIPATION_STATUS = "ptst";
+        public static string A_RSVP = "rsvp";
+	    public static string A_TIMEZONE = "tz";
+	    public static string A_DATE = "d";
+	    public static string A_EMAIL = "a";
+	    public static string A_DISPLAY_NAME = "d";
+	    public static string A_ACTION = "action";
+	    public static string A_MINUTES = "m";
+	    public static string A_RELATED = "related";
+	    public static string A_NEGATIVE = "neg";
+	    public static string A_TYPE = "t";
+	    public static string A_NAME_PART = "p";
+	    public static string A_CONTENT_TYPE = "ct";
+	    public static string A_CUTYPE = "cutype";
+	    public static string A_CAL_ITEM_ID = "calItemId";
+
+        //values ...
+        public static string V_PARENT_FOLDER_ID_10 = "10";
+	    public static string V_STATUS_CONF = "CONF";
+        public static string V_FB_BUSY = "B";
+	    public static string V_APPT_CLASS_PUB = "PUB";
+	    public static string V_TRANSP_OPAQUE  = "O";
+	    public static string V_ZERO = "0";
+	    public static string V_ROLE_NON = "NON";
+	    public static string V_ROLE_REQ = "REQ";
+	    public static string V_PARTICIPATION_STATUS_NE = "NE";
+	    public static string V_TRUE = "1";
+	    public static string V_TIMEZONE_TAIPEI = "Asia/Taipei";
+	    public static string V_ACTION_DISPLAY = "DISPLAY";
+	    public static string V_TO = "t";
+	    public static string V_CT = "multipart/alternative";
+	    public static string V_TEXT_PLAIN = "text/plain";
+	    public static string V_RELATED_START = "START";
+	    public static string V_CUTYPE_RES = "RES";
 
         //qualified names
 
@@ -123,7 +179,8 @@ namespace Zimbra.Client.Mail
 			new MsgActionResponse(), 
             new GetWorkingHoursResponse(), 
             new SearchCalendarResourcesResponse(), 
-            new GetFreeBusyResponse()
+            new GetFreeBusyResponse(),
+            new CreateAppointmentResponse()
         };
 
 		//IZimbraService
