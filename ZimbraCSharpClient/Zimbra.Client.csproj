@@ -98,6 +98,8 @@
     <Compile Include="src\Dispatcher.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="src\Mail\CancelAppointment.cs" />
+    <Compile Include="src\Mail\CheckRecurConflicts.cs" />
     <Compile Include="src\Mail\Class1.cs" />
     <Compile Include="src\Mail\CreateAppointment.cs" />
     <Compile Include="src\Mail\GetAppointment.cs">
@@ -127,6 +129,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="src\Account\SearchCalendarResources.cs" />
+    <Compile Include="src\Mail\Search.cs" />
     <Compile Include="src\Mail\Sync.cs">
       <SubType>Code</SubType>
     </Compile>

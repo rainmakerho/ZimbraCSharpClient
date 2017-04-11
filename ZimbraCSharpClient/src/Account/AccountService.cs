@@ -80,14 +80,16 @@ namespace Zimbra.Client.Account
         public static String A_ATTRS = "attrs";
         public static string A_ATTR = "attr";
         
-        public static string A_OP_TYPE = "eq";
+        public static string A_OP_TYPE_EQ = "eq";
+	    public static string A_OP_TYPE_STARTWITH = "startswith";
         public static string A_VALUE = "value";
         
         public static String A_OP = "op";
 
         //attribute Values
-        public static string V_ATTR_TYPE = "zimbraCalResType";
+        public static string V_ATTR_CALRES_TYPE = "zimbraCalResType";
         public static string V_LOCATION = "location";
+	    public static string V_EQUIPMENT = "Equipment";
         public static string V_DEFAULT_CALENDAR_ATTRS = "email,fullName";
 
         //qualified names

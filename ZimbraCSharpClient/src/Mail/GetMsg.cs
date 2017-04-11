@@ -23,7 +23,11 @@
  * ***** END LICENSE BLOCK *****
  */
 using System;
+using System.Collections.Generic;
 using System.Xml;
+using Zimbra.Client.src.Mail;
+using Zimbra.Client.Util;
+
 namespace Zimbra.Client.Mail
 {
 
@@ -54,4 +58,51 @@ namespace Zimbra.Client.Mail
 			return doc;
 		}
 	}
+
+
+    public class GetMsgResponse : Response
+    {
+        public List<Attendee> Attendees;
+
+        public GetMsgResponse()
+        {}
+
+        public GetMsgResponse(List<Attendee> attendees)
+        {
+            Attendees = attendees;
+        }
+
+
+        public override String Name
+        {
+            get { return MailService.NS_PREFIX + ":" + MailService.GET_MSG_RESPONSE; }
+        }
+
+        public override Response NewResponse(XmlNode responseNode)
+        {
+            var attendees = new List<Attendee>();
+            //取得 Msg 的參與人員
+            var attendeeNodes = responseNode.SelectNodes($"//{MailService.NS_PREFIX}:at", XmlUtil.NamespaceManager);
+            if (attendeeNodes != null)
+            {
+                foreach (XmlNode attendeeNode in attendeeNodes)
+                {
+                     
+                    string displayName = XmlUtil.AttributeValue(attendeeNode.Attributes, MailService.A_DISPLAY_NAME);
+                    string email = XmlUtil.AttributeValue(attendeeNode.Attributes, MailService.A_EMAIL);
+                    string userType = XmlUtil.AttributeValue(attendeeNode.Attributes, MailService.A_CUTYPE);
+                    attendees.Add(new Attendee
+                    {
+                        DisplayName = displayName,
+                        Email = email,
+                        UserType = $"{userType}"
+                    });
+                }
+            }
+            
+            var res = new GetMsgResponse(attendees);
+            res.ResponseNode = responseNode;
+            return res;
+        }
+    }
 }

@@ -9,14 +9,14 @@ namespace Zimbra.Client.src.Mail
 {
     public class GetFreeBusyRequest : MailServiceRequest
     {
-        private DateTime start; //localTime
-        private DateTime end;	//localTime
-        private string searchNames;
+        private DateTime _start; //localTime
+        private DateTime _end;	//localTime
+        private string _searchNames;
         public GetFreeBusyRequest(DateTime localStart, DateTime localEnd, string searchNames)
         {
-            this.start = localStart;
-            this.end = localEnd;
-            this.searchNames = searchNames;
+            this._start = localStart;
+            this._end = localEnd;
+            this._searchNames = searchNames;
         }
 
         public override String Name()
@@ -28,9 +28,9 @@ namespace Zimbra.Client.src.Mail
         {
             XmlDocument doc = new XmlDocument();
             XmlElement reqElem = doc.CreateElement(MailService.GET_FREE_BUSY_REQUEST, MailService.NAMESPACE_URI);
-            reqElem.SetAttribute(MailService.A_NAME, searchNames);
-            Int64 gmtStartMillis = DateUtil.DateTimeToGmtMillis(start);
-            Int64 gmtEndMillis = DateUtil.DateTimeToGmtMillis(end);
+            reqElem.SetAttribute(MailService.A_NAME, _searchNames);
+            Int64 gmtStartMillis = DateUtil.DateTimeToGmtMillis(_start);
+            Int64 gmtEndMillis = DateUtil.DateTimeToGmtMillis(_end);
             reqElem.SetAttribute(MailService.A_START, gmtStartMillis.ToString());
             reqElem.SetAttribute(MailService.A_END, gmtEndMillis.ToString());
             doc.AppendChild(reqElem);

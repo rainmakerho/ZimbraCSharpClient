@@ -5,6 +5,6 @@ C:\projects\zimbra\ZimbraCSharpClient\obj\Debug\Zimbra.Client.dll
 C:\projects\zimbra\ZimbraCSharpClient\obj\Debug\Zimbra.Client.pdb
 C:\projects\ZimbraCSharpClient\ZimbraCSharpClient\bin\Debug\Zimbra.Client.dll
 C:\projects\ZimbraCSharpClient\ZimbraCSharpClient\bin\Debug\Zimbra.Client.pdb
-C:\projects\ZimbraCSharpClient\ZimbraCSharpClient\obj\Debug\Zimbra.Client.csprojResolveAssemblyReference.cache
 C:\projects\ZimbraCSharpClient\ZimbraCSharpClient\obj\Debug\Zimbra.Client.dll
 C:\projects\ZimbraCSharpClient\ZimbraCSharpClient\obj\Debug\Zimbra.Client.pdb
+C:\projects\ZimbraCSharpClient\ZimbraCSharpClient\obj\Debug\Zimbra.Client.csprojResolveAssemblyReference.cache

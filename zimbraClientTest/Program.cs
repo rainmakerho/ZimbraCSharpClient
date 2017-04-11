@@ -23,8 +23,8 @@ namespace zimbraClientTest
             InitDispatcher();
 
             //透過使用者帳密，取回Token
-            var userId = "rm@gss.com.tw";
-            var pwd = "your zimbra pwd";
+            var userId = "rainmaker_ho@gss.com.tw";
+            var pwd = "your pwd";
             GetToken(userId, pwd);
 
             //_ZmailRequest.ApiRequest = new GetFolderRequest();
@@ -53,7 +53,7 @@ namespace zimbraClientTest
             //{
             //    var condE = conditionFilters.OwnerDocument.CreateElement(AccountService.E_COND, AccountService.NAMESPACE_URI);
             //    condE.SetAttribute(AccountService.A_ATTR, AccountService.V_ATTR_TYPE);
-            //    condE.SetAttribute(AccountService.A_OP, AccountService.A_OP_TYPE);
+            //    condE.SetAttribute(AccountService.A_OP, AccountService.A_OP_TYPE_EQ);
             //    condE.SetAttribute(AccountService.A_VALUE, AccountService.V_LOCATION);
             //    conditionFilters.AppendChild(condE);
             //};
@@ -62,24 +62,59 @@ namespace zimbraClientTest
 
 
             //訂會議
-            var app = new Appointment();
-            app.Subject = "RM 測試主旨";
-            app.Body = @"這是Body
-行一
-行2
-行3
-            ";
-            app.StartDate = new DateTime(2017, 4, 3, 15, 0, 0);
-            app.EndDate = new DateTime(2017, 4, 3, 15, 30, 0);
-            app.Organizer = new Attendee { Email = "rainmaker@gss.com.tw", DisplayName = "Rainmaker Ho" };
-            app.Location = new Attendee { Email = "room_xz@gss.com.tw", DisplayName = "舞蝶館" };
-            app.Attendees = new List<Attendee>()
-            {
-                new Attendee {Email = "alice@gss.com.tw", DisplayName = "Alice Lai"}
-            };
+            //var app = new AppointmentRequestParams();
+            //app.Subject = "到 一銀  Support";
+            ////app.Body = @"這是Body
+            ////行一
+            ////行2
+            ////行3
+            ////            ";
+            //app.StartDate = new DateTime(2017, 4, 7, 15, 30, 0);
+            //app.EndDate = new DateTime(2017, 4, 7, 16, 30, 0);
+            //app.Organizer = new Attendee { Email = "rainmaker_ho@gss.com.tw", DisplayName = "Rainmaker Ho" };
+            //app.Locations = new List<Attendee>()
+            //{
+            //    //new Attendee {Email ="room_xz_01@gss.com.tw", DisplayName =  "協志會議室-舞蝶館"},
+            //    //new Attendee {Email ="room_xz_02@gss.com.tw", DisplayName =  "協志會議室-天空農場"},
+            //};
+            //app.Attendees = new List<Attendee>()
+            //            {
+            //               // new Attendee {Email = "alice_lai@gss.com.tw", DisplayName = "Alice Lai"}
+            //            };
 
-            _ZmailRequest.ApiRequest = new CreateAppointmentRequest(app);
+            //_ZmailRequest.ApiRequest = new CreateAppointmentRequest(app);
+            //var zResquestx = _ZmailDispatcher.SendRequest(_ZmailRequest);
+
+
+            //取得會議室的資訊
+            var sdate = new DateTime(2017, 4, 7, 08, 0, 0);
+            var edate = new DateTime(2017, 4, 7, 18, 0, 0);
+            var searchReqParams = new SearchRequestParams();
+            searchReqParams.LocalEnd = edate;
+            searchReqParams.LocalStart = sdate;
+            _ZmailRequest.ApiRequest = new SearchRequest(searchReqParams);
             var zResquest = _ZmailDispatcher.SendRequest(_ZmailRequest);
+
+            //取出會議室的資訊
+            var searchRes = zResquest.ApiResponse as SearchResponse;
+            var appts = searchRes.Appointments;
+            foreach (var appt in appts)
+            {
+                Console.WriteLine($"{appt.Name}, OR:{appt.Organizer.DisplayName}, {appt.Organizer.Email}");
+                _ZmailRequest.ApiRequest = new GetMsgRequest(appt.InviteMessageId);
+                var msgRequest = _ZmailDispatcher.SendRequest(_ZmailRequest);
+                var msgResp = msgRequest.ApiResponse as GetMsgResponse;
+                var attendees = msgResp?.Attendees;
+                if (attendees != null)
+                {
+                    foreach (var attendee in attendees)
+                    {
+                        
+                        Console.WriteLine($"  {attendee.DisplayName}, {attendee.Email}, {attendee.UserType}");
+                    }
+                }
+                
+            }
 
         }
 

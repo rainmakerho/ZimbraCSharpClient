@@ -57,7 +57,10 @@ namespace Zimbra.Client.src.Mail
         public override Response NewResponse(XmlNode responseNode)
         {
             var workinghours = WorkinghoursUtil.ParseNodeInfo2Workinghours(responseNode);
-            return new GetWorkingHoursResponse(workinghours);
+            var res = new GetWorkingHoursResponse(workinghours);
+            res.ResponseNode = responseNode;
+            return res;
+
         }
 
 

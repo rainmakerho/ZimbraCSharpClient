@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zimbra.Client", "Zimbra.Cli
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "zimbraClientTest", "..\zimbraClientTest\zimbraClientTest.csproj", "{22AA39B6-0869-4F2B-AADF-C8F07C192D55}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zimbra.Client.Test", "..\Zimbra.Client.Test\Zimbra.Client.Test.csproj", "{29277006-CE96-4E23-8FA9-E1AE446B714F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{22AA39B6-0869-4F2B-AADF-C8F07C192D55}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{22AA39B6-0869-4F2B-AADF-C8F07C192D55}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{22AA39B6-0869-4F2B-AADF-C8F07C192D55}.Release|Any CPU.Build.0 = Release|Any CPU
+		{29277006-CE96-4E23-8FA9-E1AE446B714F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{29277006-CE96-4E23-8FA9-E1AE446B714F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{29277006-CE96-4E23-8FA9-E1AE446B714F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{29277006-CE96-4E23-8FA9-E1AE446B714F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

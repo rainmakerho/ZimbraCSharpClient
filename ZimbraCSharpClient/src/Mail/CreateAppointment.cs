@@ -12,14 +12,14 @@ namespace Zimbra.Client.src.Mail
 {
     public class CreateAppointmentRequest : MailServiceRequest
     {
-        private Appointment appointment;
+        private AppointmentRequestParams appointment;
 
-        public static string DateTimeFormat = "yyyyMMddTHHmmss";
+        
 
         public CreateAppointmentRequest()
         {}
 
-        public CreateAppointmentRequest(Appointment app)
+        public CreateAppointmentRequest(AppointmentRequestParams app)
         {
             appointment = app;
             if (appointment.Attendees == null) appointment.Attendees = new List<Attendee>();
@@ -33,12 +33,14 @@ namespace Zimbra.Client.src.Mail
 
         public override XmlDocument ToXmlDocument()
         {
+            if (appointment.Locations == null) appointment.Locations = new List<Attendee>();
+
             XmlDocument doc = new XmlDocument();
             XmlElement reqElem = doc.CreateElement(MailService.CREATE_APPT_REQUEST, MailService.NAMESPACE_URI);
-
+            
              
             var m = doc.CreateElement(MailService.E_MESSAGE, MailService.NAMESPACE_URI);
-            m.SetAttribute(MailService.A_PARENT_FOLDER_ID, MailService.V_PARENT_FOLDER_ID_10);
+            m.SetAttribute(MailService.A_PARENT_FOLDER_ID, MailService.V_METTING_PARENT_FOLDER_ID);
             var inv = doc.CreateElement(MailService.E_INV, MailService.NAMESPACE_URI);
             var comp = doc.CreateElement(MailService.E_COMP, MailService.NAMESPACE_URI);
             comp.SetAttribute(MailService.A_STATUS, MailService.V_STATUS_CONF);
@@ -48,17 +50,32 @@ namespace Zimbra.Client.src.Mail
             comp.SetAttribute(MailService.A_DRAFT, MailService.V_ZERO);
             comp.SetAttribute(MailService.A_APPT_ALLDAY, MailService.V_ZERO);
             comp.SetAttribute(MailService.A_NAME, appointment.Subject);
-            comp.SetAttribute(MailService.A_LOCATION, appointment.Location.Email);
+           
+                var locations = appointment.Locations.Aggregate<Attendee, string>(string.Empty,
+                (x, y) =>
+                {
+                    var init = x.Length > 0 ? x + MailService.SEMICOLON : x;
+                    init += $"\"{y.DisplayName}\" <{y.Email}>";
+                    return init;
+                });
+            
+            comp.SetAttribute(MailService.A_LOCATION, $"{locations}" );
 
-            //會議室 Location
-            var loc = doc.CreateElement(MailService.E_ATTENDEES, MailService.NAMESPACE_URI);
-            loc.SetAttribute(MailService.A_ROLE, MailService.V_ROLE_NON);
-            loc.SetAttribute(MailService.A_PARTICIPATION_STATUS, MailService.V_PARTICIPATION_STATUS_NE);
-            loc.SetAttribute(MailService.A_RSVP, MailService.V_TRUE);
-            loc.SetAttribute(MailService.A_EMAIL, appointment.Location.Email);
-            loc.SetAttribute(MailService.A_DISPLAY_NAME, appointment.Location.DisplayName);
-            loc.SetAttribute(MailService.A_CUTYPE, MailService.V_CUTYPE_RES);
-            comp.AppendChild(loc);
+             
+                //會議室 Location
+                foreach (var attendee in appointment.Locations)
+                {
+                    var loc = doc.CreateElement(MailService.E_ATTENDEES, MailService.NAMESPACE_URI);
+                    loc.SetAttribute(MailService.A_ROLE, MailService.V_ROLE_NON);
+                    loc.SetAttribute(MailService.A_PARTICIPATION_STATUS, MailService.V_PARTICIPATION_STATUS_NE);
+                    loc.SetAttribute(MailService.A_RSVP, MailService.V_TRUE);
+                    loc.SetAttribute(MailService.A_EMAIL, attendee.Email);
+                    loc.SetAttribute(MailService.A_DISPLAY_NAME, attendee.DisplayName);
+                    loc.SetAttribute(MailService.A_CUTYPE, MailService.V_CUTYPE_RES);
+                    comp.AppendChild(loc);
+                }  
+            
+            
 
             //OR
             var or = doc.CreateElement(MailService.E_ATTENDEES, MailService.NAMESPACE_URI);
@@ -87,14 +104,14 @@ namespace Zimbra.Client.src.Mail
             var start = appointment.StartDate;
             var s = doc.CreateElement(MailService.E_START, MailService.NAMESPACE_URI);
             s.SetAttribute(MailService.A_TIMEZONE, MailService.V_TIMEZONE_TAIPEI);
-            s.SetAttribute(MailService.A_DATE, start.ToString(DateTimeFormat));
+            s.SetAttribute(MailService.A_DATE, start.ToString(MailService.DateTimeFormat));
             comp.AppendChild(s);
 
 
             var end = appointment.EndDate;
             var e = doc.CreateElement(MailService.E_END, MailService.NAMESPACE_URI);
             e.SetAttribute(MailService.A_TIMEZONE, MailService.V_TIMEZONE_TAIPEI);
-            e.SetAttribute(MailService.A_DATE, end.ToString(DateTimeFormat));
+            e.SetAttribute(MailService.A_DATE, end.ToString(MailService.DateTimeFormat));
             comp.AppendChild(e);
 
             or = doc.CreateElement(MailService.E_ORGANIZER, MailService.NAMESPACE_URI);
@@ -135,15 +152,15 @@ namespace Zimbra.Client.src.Mail
             or.SetAttribute(MailService.A_TYPE, MailService.V_TO);
             m.AppendChild(or);
 
-            loc = doc.CreateElement(MailService.E_EMAIL, MailService.NAMESPACE_URI);
-            loc.SetAttribute(MailService.A_EMAIL, appointment.Location.Email);
-            loc.SetAttribute(MailService.A_NAME_PART, appointment.Location.DisplayName);
-            loc.SetAttribute(MailService.A_TYPE, MailService.V_TO);
-            m.AppendChild(loc);
-
-            
-
-
+             
+            foreach (var attendee in appointment.Locations)
+            {
+                var loc = doc.CreateElement(MailService.E_EMAIL, MailService.NAMESPACE_URI);
+                loc.SetAttribute(MailService.A_EMAIL, attendee.Email);
+                loc.SetAttribute(MailService.A_NAME_PART, attendee.DisplayName);
+                loc.SetAttribute(MailService.A_TYPE, MailService.V_TO);
+                m.AppendChild(loc);
+            }
             
 
             var su = doc.CreateElement(MailService.E_SUBJECT, MailService.NAMESPACE_URI);
@@ -161,13 +178,11 @@ namespace Zimbra.Client.src.Mail
                                 $"組織者: '{appointment.Organizer.DisplayName}' <{appointment.Organizer.Email}>" +
                                 Environment.NewLine +
                                 Environment.NewLine +
-                                $"地點﹕ '{appointment.Location.DisplayName}' <{appointment.Location.Email}>" +
-                                Environment.NewLine +
-                                $"資源﹕ '{appointment.Location.DisplayName}' <{appointment.Location.Email}>" +
+                                $"地點﹕ '{locations}>" +
                                 Environment.NewLine +
                                 $"時間: {appointment.StartDate} To {appointment.EndDate}" + Environment.NewLine +
                                 Environment.NewLine +
-                                $"受邀人: {appointment.Attendees.Aggregate<Attendee, string>(string.Empty, (x, y) => x.Length > 0 ? x + ";" : x)}" +
+                                $"受邀人: {appointment.Attendees.Aggregate<Attendee, string>(string.Empty, (x, y) => x.Length > 0 ? x + MailService.SEMICOLON : x)}" +
                                 Environment.NewLine + Environment.NewLine +
                                 "*~*~*~*~*~*~*~*~*~*" + Environment.NewLine + Environment.NewLine +
                                 $"{appointment.Body}";
@@ -187,13 +202,13 @@ namespace Zimbra.Client.src.Mail
 
     public class CreateAppointmentResponse : Response
     {
-        private String id;
+        public  AppointmentResponse AppointmentResponse;
         public CreateAppointmentResponse()
         {}
 
-        public CreateAppointmentResponse(string id)
+        public CreateAppointmentResponse(AppointmentResponse appRes)
         {
-            this.id = id;
+            AppointmentResponse = appRes;
         }
         public override String Name
         {
@@ -203,13 +218,19 @@ namespace Zimbra.Client.src.Mail
         public override Response NewResponse(XmlNode responseNode)
         {
             var calItemId = XmlUtil.AttributeValue(responseNode.Attributes, MailService.A_CAL_ITEM_ID);
-            return new CreateAppointmentResponse(calItemId);
+            var inviteMessageId = XmlUtil.AttributeValue(responseNode.Attributes, MailService.A_INV_ID);
+            var appResponse = new AppointmentResponse {Id = calItemId, InviteMessageId = inviteMessageId};
+            
+            var res = new CreateAppointmentResponse(appResponse);
+            res.ResponseNode = responseNode;
+            return res;
         }
     }
 
     public class AppointmentResponse
     {
-        public string AppointmentId { get; set; }
+        //對應到 calItemId
+        public string Id { get; set; }
        
         public string InviteMessageId { get; set; }
     }
@@ -219,12 +240,15 @@ namespace Zimbra.Client.src.Mail
         public string Email { get; set; }
         
         public string DisplayName { get; set; }
+
+        //Calendar user type
+        public string UserType { get; set; }
     }
 
-    public class Appointment
+    public class AppointmentRequestParams
     {
 
-        public Appointment()
+        public AppointmentRequestParams()
         {
             this.Timezone = MailService.V_TIMEZONE_TAIPEI;
             this.AlarmMinutes = 5;
@@ -232,7 +256,7 @@ namespace Zimbra.Client.src.Mail
 
         public Attendee Organizer { get; set; }
 
-        public Attendee Location { get; set; }
+        public List<Attendee> Locations { get; set; }
 
         public List<Attendee> Attendees { get; set; }
 

@@ -148,7 +148,10 @@ namespace Zimbra.Client
 	{
 		public abstract Response NewResponse(XmlNode responseNode);
 		public abstract String Name{ get; }
-	}
+
+        public XmlNode ResponseNode;
+ 
+    }
 
 
 	public class ResponseManager

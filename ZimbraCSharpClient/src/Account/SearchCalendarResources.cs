@@ -41,8 +41,8 @@ namespace Zimbra.Client.src.Account
             {
                 //預設查詢 會議室
                 XmlElement condE = doc.CreateElement(AccountService.E_COND, AccountService.NAMESPACE_URI);
-                condE.SetAttribute(AccountService.A_ATTR, AccountService.V_ATTR_TYPE);
-                condE.SetAttribute(AccountService.A_OP, AccountService.A_OP_TYPE);
+                condE.SetAttribute(AccountService.A_ATTR, AccountService.V_ATTR_CALRES_TYPE);
+                condE.SetAttribute(AccountService.A_OP, AccountService.A_OP_TYPE_EQ);
                 condE.SetAttribute(AccountService.A_VALUE, AccountService.V_LOCATION);
                 condsE.AppendChild(condE);
             }
