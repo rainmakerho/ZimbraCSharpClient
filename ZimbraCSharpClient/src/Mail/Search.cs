@@ -37,8 +37,8 @@ namespace Zimbra.Client.src.Mail
             reqElem.SetAttribute(MailService.A_CAL_EXPAND_INST_START, gmtStartMillis.ToString());
             reqElem.SetAttribute(MailService.A_CAL_EXPAND_INST_END, gmtEndMillis.ToString());
             //conversation|message|contact|appointment|task|wiki|document 
-            reqElem.SetAttribute(MailService.A_TYPES, _searchParams.Type.ToString("G"));
-            reqElem.SetAttribute(MailService.A_SORT_BY, _searchParams.SortBy.ToString("G"));
+            reqElem.SetAttribute(MailService.A_TYPES, _searchParams.Type.ToString(MailService.EnumToStringFormat));
+            reqElem.SetAttribute(MailService.A_SORT_BY, _searchParams.SortBy.ToString(MailService.EnumToStringFormat));
 
             var qryElem = doc.CreateElement(MailService.E_QUERY, MailService.NAMESPACE_URI);
             qryElem.InnerText = $"inid:{_searchParams.FolderId}";

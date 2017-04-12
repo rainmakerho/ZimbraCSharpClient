@@ -15,11 +15,11 @@
 | GetMsg | 透過 Message Id 取得會議相關資訊(一般是取得與會人員) | Mail | 
 | CheckRecurConflicts | 檢查行事曆是否有衝突，一般用在 book 之前，先check | Mail |
 | CancelAppointment | 取消會議(組織者才能使用) | Mail |
-
+| SendInviteReply | 回覆會議(ACCEPT,DECLINE,TENTATIVE) | Mail |
  
 ## Zimbra.Client.Test 為測試專案
-### Initialize 設定 Zimbra 的登入資訊 
-### AssignUserToken 透過帳密取回 Token 
+### Initialize Method 設定 Zimbra 的登入資訊 
+### AssignUserToken Method 透過帳密取回 Token 
 
 - AccountTests.cs 
 ```C#
@@ -447,6 +447,25 @@ public void CheckRecurConflictsRequestTest()
 	}
 }
 
+[TestMethod]
+[Description("回覆拒絕參加會議")]
+public void SendInviteReplyRequestSelfTest()
+{
+	var param = new SendInviteReplyRequestParam();
+	param.Subject = "討論WCF與EF架構";
+	param.Body = "DECLINE:討論WCF與EF架構";
+	//需要先取得 invId 不然測試會失敗
+	param.Id = "32412-32411";
+	param.Organizer = new Attendee {Email = "alice_lai@gss.com.tw"};
+	param.Replier = new Attendee { Email = "rainmaker_ho@gss.com.tw" };
+	param.Verb = SendInviteReplyRequestParam.ReplyVerbs.DECLINE;
+
+	ZmailRequest.ApiRequest = new SendInviteReplyRequest(param);
+	var zResquest = ZmailDispatcher.SendRequest(ZmailRequest);
+	var resp = zResquest.ApiResponse as SendInviteReplyResponse;
+	var invId = resp?.InvId;
+	Console.WriteLine($"InvId:{invId}");
+}
 
 ```
 

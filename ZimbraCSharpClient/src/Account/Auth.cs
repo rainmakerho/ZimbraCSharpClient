@@ -116,9 +116,9 @@ namespace Zimbra.Client.Account
 
 		public override Response NewResponse(XmlNode responseNode)
 		{
-			String authToken = XmlUtil.GetNodeText( responseNode, AccountService.Q_AUTHTOKEN );
-			String lifetime  = XmlUtil.GetNodeText( responseNode, AccountService.Q_LIFETIME );
-			String sessionId = XmlUtil.GetNodeText( responseNode, AccountService.Q_SESSIONID);
+			var authToken = XmlUtil.GetNodeText( responseNode, AccountService.Q_AUTHTOKEN );
+			var lifetime  = XmlUtil.GetNodeText( responseNode, AccountService.Q_LIFETIME );
+			var sessionId = XmlUtil.GetNodeText( responseNode, AccountService.Q_SESSIONID);
 
 			return new AuthResponse( authToken, lifetime, sessionId );
 		}

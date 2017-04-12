@@ -35,7 +35,8 @@ namespace Zimbra.Client.Mail
 		public static String NS_PREFIX						= "mail";
 		public static String NAMESPACE_URI					= "urn:zimbraMail";
 	    public static String SEMICOLON = ";";
-        public static string DateTimeFormat = "yyyyMMddTHHmmss";
+        public static String DateTimeFormat = "yyyyMMddTHHmmss";
+	    public static String EnumToStringFormat = "G";
 
         //requests
         public static String GET_FOLDER_REQUEST				= "GetFolderRequest";
@@ -54,6 +55,8 @@ namespace Zimbra.Client.Mail
         public static String CREATE_APPT_REQUEST = "CreateAppointmentRequest";
 	    public static String CANCEL_APPT_REQUEST = "CancelAppointmentRequest";
 	    public static String CHECK_RECURCONFLICTS_REQUEST = "CheckRecurConflictsRequest";
+	    public static String SEND_INVITE_REPLY_REQUEST = "SendInviteReplyRequest";
+
 
         //responses
         public static String GET_FOLDER_RESPONSE			= "GetFolderResponse";
@@ -72,7 +75,7 @@ namespace Zimbra.Client.Mail
 	    public static String CREATE_APPT_RESPONSE = "CreateAppointmentResponse";
         public static String CANCEL_APPT_RESPONSE = "CancelAppointmentResponse";
         public static String CHECK_RECURCONFLICTS_RESPONSE = "CheckRecurConflictsResponse";
-
+        public static String SEND_INVITE_REPLY_REPONSE = "SendInviteReplyResponse";
 
         //elements
         public static String E_FOLDER						= "folder";
@@ -154,11 +157,10 @@ namespace Zimbra.Client.Mail
 	    public static String A_CUTYPE = "cutype";
 	    public static String A_CAL_ITEM_ID = "calItemId";
 	    public static String A_MODIFY_SEQUENCE = "ms";
-         
-
-
         public static String A_CAL_EXPAND_INST_START = "calExpandInstStart";
         public static String A_CAL_EXPAND_INST_END = "calExpandInstEnd";
+	    public static String A_VERB = "verb";
+	    public static String A_UPDATE_OGGANIZER = "updateOrganizer";
 
         //values ...
         public static String V_METTING_PARENT_FOLDER_ID = "10";
@@ -174,7 +176,8 @@ namespace Zimbra.Client.Mail
 	    public static String V_TIMEZONE_TAIPEI = "Asia/Taipei";
 	    public static String V_ACTION_DISPLAY = "DISPLAY";
 	    public static String V_TO = "t";
-	    public static String V_CT = "multipart/alternative";
+        public static String V_FROM = "f";
+        public static String V_CT = "multipart/alternative";
 	    public static String V_TEXT_PLAIN = "text/plain";
 	    public static String V_RELATED_START = "START";
 	    public static String V_CUTYPE_RES = "RES";
@@ -196,7 +199,8 @@ namespace Zimbra.Client.Mail
             new SearchResponse(),
             new GetMsgResponse(),
             new CheckRecurConflictsResponse(),
-            new CancelAppointmentResponse()
+            new CancelAppointmentResponse(),
+            new SendInviteReplyResponse()
         };
 
 		//IZimbraService

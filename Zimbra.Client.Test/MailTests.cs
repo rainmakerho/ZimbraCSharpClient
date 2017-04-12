@@ -28,7 +28,7 @@ namespace Zimbra.Client.Test
             ZmailServer = "zmail.gss.com.tw";
             ZmailServerPort = 443;
             UserId = "rainmaker_ho@gss.com.tw";
-            Pwd = "你的密碼";
+            Pwd = "yourpassword";
             AssignUserToken();
         }
 
@@ -471,5 +471,29 @@ namespace Zimbra.Client.Test
             }
 
         }
+
+
+        [TestMethod]
+        [Description("回覆拒絕參加會議")]
+        public void SendInviteReplyRequestSelfTest()
+        {
+            var param = new SendInviteReplyRequestParam();
+            param.Subject = "討論WCF與EF架構";
+            param.Body = "DECLINE:討論WCF與EF架構";
+            //需要先取得 invId 不然測試會失敗
+            param.Id = "32412-32411";
+            param.Organizer = new Attendee {Email = "alice_lai@gss.com.tw"};
+            param.Replier = new Attendee { Email = "rainmaker_ho@gss.com.tw" };
+            param.Verb = SendInviteReplyRequestParam.ReplyVerbs.DECLINE;
+
+            ZmailRequest.ApiRequest = new SendInviteReplyRequest(param);
+            var zResquest = ZmailDispatcher.SendRequest(ZmailRequest);
+            var resp = zResquest.ApiResponse as SendInviteReplyResponse;
+            var invId = resp?.InvId;
+            Console.WriteLine($"InvId:{invId}");
+        }
+
+
+
     }
 }
