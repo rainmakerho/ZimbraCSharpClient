@@ -23,7 +23,7 @@ namespace Zimbra.Client.Test
             ZmailServer = "zmail.gss.com.tw";
             ZmailServerPort = 443;
             UserId = "rainmaker_ho@gss.com.tw";
-            Pwd = "你的密碼";
+            Pwd = "your pwd";
             AssignUserToken();
         }
 

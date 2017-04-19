@@ -6,12 +6,14 @@ C:\projects\ZimbraCSharpClient\Zimbra.Client.Test\bin\Debug\zh-Hant\Microsoft.Vi
 C:\projects\ZimbraCSharpClient\Zimbra.Client.Test\bin\Debug\zh-Hant\Microsoft.VisualStudio.TestPlatform.TestFramework.resources.dll
 C:\projects\ZimbraCSharpClient\Zimbra.Client.Test\bin\Debug\Zimbra.Client.Test.dll
 C:\projects\ZimbraCSharpClient\Zimbra.Client.Test\bin\Debug\Zimbra.Client.Test.pdb
+C:\projects\ZimbraCSharpClient\Zimbra.Client.Test\bin\Debug\Itenso.TimePeriod.dll
 C:\projects\ZimbraCSharpClient\Zimbra.Client.Test\bin\Debug\Microsoft.VisualStudio.TestPlatform.TestFramework.dll
 C:\projects\ZimbraCSharpClient\Zimbra.Client.Test\bin\Debug\Microsoft.VisualStudio.TestPlatform.TestFramework.Extensions.dll
 C:\projects\ZimbraCSharpClient\Zimbra.Client.Test\bin\Debug\Zimbra.Client.dll
 C:\projects\ZimbraCSharpClient\Zimbra.Client.Test\bin\Debug\Zimbra.Client.pdb
 C:\projects\ZimbraCSharpClient\Zimbra.Client.Test\bin\Debug\Microsoft.VisualStudio.TestPlatform.TestFramework.xml
 C:\projects\ZimbraCSharpClient\Zimbra.Client.Test\bin\Debug\Microsoft.VisualStudio.TestPlatform.TestFramework.Extensions.xml
+C:\projects\ZimbraCSharpClient\Zimbra.Client.Test\bin\Debug\de\Itenso.TimePeriod.resources.dll
 C:\projects\ZimbraCSharpClient\Zimbra.Client.Test\obj\Debug\Zimbra.Client.Test.csprojResolveAssemblyReference.cache
 C:\projects\ZimbraCSharpClient\Zimbra.Client.Test\obj\Debug\Zimbra.Client.Test.dll
 C:\projects\ZimbraCSharpClient\Zimbra.Client.Test\obj\Debug\Zimbra.Client.Test.pdb

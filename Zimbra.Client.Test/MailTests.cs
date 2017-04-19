@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Text;
 using System.Collections.Generic;
+using System.Diagnostics;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Zimbra.Client.Account;
 using Zimbra.Client.src.Mail;
 using System.Linq;
+using Itenso.TimePeriod;
 using Zimbra.Client.Mail;
+using Zimbra.Client.src.Account;
 
 namespace Zimbra.Client.Test
 {
@@ -28,7 +31,7 @@ namespace Zimbra.Client.Test
             ZmailServer = "zmail.gss.com.tw";
             ZmailServerPort = 443;
             UserId = "rainmaker_ho@gss.com.tw";
-            Pwd = "yourpassword";
+            Pwd = "你的密碼";
             AssignUserToken();
         }
 
@@ -150,6 +153,113 @@ namespace Zimbra.Client.Test
                 }
             }
         }
+
+
+        [TestMethod]
+        [Description("Book 會議室，查詢多人多天，可以使用那些設備的時間")]
+        public void GetFreeBusyRequestTimePeriodIntersectorTest()
+        {
+            //取得會議室資訊
+            var calendarAttributes =
+                "fullName,email";
+            var searchMeetingRooms = new SearchCalendarResourcesRequest(calendarAttributes);
+           
+            ZmailRequest.ApiRequest = searchMeetingRooms;
+            var zResquestRoom = ZmailDispatcher.SendRequest(ZmailRequest);
+            var respRoom = zResquestRoom.ApiResponse as SearchCalendarResourcesResponse;
+            var crList = respRoom?.CalendarResourceList;
+             
+            if (crList != null)
+            {
+                var crEmails = crList.Select(cr => cr.AttributesList.Where(ar => ar.Key.Equals("email")).Select(ar => ar.Value).FirstOrDefault());
+                var sdate = DateTime.Now;
+                var edate = sdate.AddDays(7);
+                //多人請用逗號隔開
+                var crEmailStrings = string.Join(",", crEmails.ToArray());
+                var searchNames = "rainmaker_ho@gss.com.tw,teresa_hua@gss.com.tw," + crEmailStrings;
+                ZmailRequest.ApiRequest = new GetFreeBusyRequest(sdate, edate, searchNames);
+                var zResquest = ZmailDispatcher.SendRequest(ZmailRequest);
+                var resp = zResquest.ApiResponse as GetFreeBusyResponse;
+                var wkHours = resp?.Workinghours;
+                if (wkHours != null)
+                {
+                    var periods = new Dictionary<string, TimePeriodCollection>();
+                    var users = wkHours.Users.Where(u => !crEmails.Contains(u.id));
+
+                    //找出所有人的共同時間
+                    var periodIntersector = new TimePeriodIntersector<TimeRange>();
+                    var resultPeriods = new TimePeriodCollection();
+                    var idx = 0;
+                    foreach (var user in users)
+                    {
+                        Console.WriteLine(user.id);
+                        Console.WriteLine("Free");
+                        var userPeriods = new TimePeriodCollection();
+                     
+                        foreach (var f in user.Fs)
+                        {
+                            Console.WriteLine($" {f.s} - {f.e}");
+                            userPeriods.Add(new TimeRange(f.s, f.e));
+                        }
+                        periods.Add(user.id, userPeriods);
+                        if (idx == 0)
+                        {
+                            resultPeriods.AddAll(user.Fs.Select(f => new TimeRange(f.s, f.e)));
+                        }
+                        else
+                        {
+                            resultPeriods.AddAll(user.Fs.Select(f => new TimeRange(f.s, f.e)));
+                            if (resultPeriods.Any())
+                            {
+                                var intersectedPeriods = periodIntersector.IntersectPeriods(resultPeriods, false);
+                                resultPeriods.Clear();
+                                resultPeriods.AddAll(intersectedPeriods.Select(p => new TimeRange(p.Start, p.End)));
+                            }
+                        }
+                        
+                         
+                    }
+                
+                    Console.WriteLine("...共同的時間...");
+                    foreach (var intersectedPeriod in resultPeriods)
+                    {
+                        Console.WriteLine("所有人共同的的時間 Period: " + intersectedPeriod);
+                    }
+
+                    //對應到會議室
+                    var crs = wkHours.Users.Where(u => crEmails.Contains(u.id));
+                     
+                    foreach (var cr in crList)
+                    {
+                        var email = cr.AttributesList.Where(ar => ar.Key.Equals("email"))
+                                .Select(ar => ar.Value)
+                                .FirstOrDefault();
+                        var fullName = cr.AttributesList.Where(ar => ar.Key.Equals("fullName"))
+                                .Select(ar => ar.Value)
+                                .FirstOrDefault();
+
+                        Console.WriteLine($"{fullName}:{email}");
+                        var crHour = wkHours.Users.FirstOrDefault(u => u.id.Equals(email));
+                        if (crHour != null)
+                        {
+                            var crPeriods = new TimePeriodCollection();
+                            crPeriods.AddAll(resultPeriods.Select(p => new TimeRange(p.Start, p.End)));
+                            crPeriods.AddAll(crHour.Fs.Select(f => new TimeRange(f.s, f.e)));
+                            var intersectedPeriods = periodIntersector.IntersectPeriods(crPeriods, false);
+                            Console.WriteLine($"{fullName}:{email}...共同的時間...");
+                            foreach (var intersectedPeriod in intersectedPeriods)
+                            {
+                                Console.WriteLine("    Period: " + intersectedPeriod);
+                            }
+                        }
+                    }
+                }
+
+            }
+
+            
+        }
+ 
 
 
         [TestMethod]
@@ -492,8 +602,9 @@ namespace Zimbra.Client.Test
             var invId = resp?.InvId;
             Console.WriteLine($"InvId:{invId}");
         }
-
-
-
+ 
     }
+
+    
+     
 }
