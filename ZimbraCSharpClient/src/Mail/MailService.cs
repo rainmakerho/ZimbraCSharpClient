@@ -23,7 +23,6 @@
  * ***** END LICENSE BLOCK *****
  */
 using System;
-using Zimbra.Client.src.Account;
 using Zimbra.Client.src.Mail;
 
 namespace Zimbra.Client.Mail
@@ -56,7 +55,8 @@ namespace Zimbra.Client.Mail
 	    public static String CANCEL_APPT_REQUEST = "CancelAppointmentRequest";
 	    public static String CHECK_RECURCONFLICTS_REQUEST = "CheckRecurConflictsRequest";
 	    public static String SEND_INVITE_REPLY_REQUEST = "SendInviteReplyRequest";
-
+	    public static String AUTO_COMPLETE_REQUEST = "AutoCompleteRequest";
+	    public static String CREATE_MOUNTPOINT_REQUEST = "CreateMountpointRequest";
 
         //responses
         public static String GET_FOLDER_RESPONSE			= "GetFolderResponse";
@@ -76,6 +76,8 @@ namespace Zimbra.Client.Mail
         public static String CANCEL_APPT_RESPONSE = "CancelAppointmentResponse";
         public static String CHECK_RECURCONFLICTS_RESPONSE = "CheckRecurConflictsResponse";
         public static String SEND_INVITE_REPLY_REPONSE = "SendInviteReplyResponse";
+	    public static String AUTO_COMPLETE_REPONSE = "AutoCompleteResponse";
+	    public static String CREATE_MOUNTPOINT_RESPONSE = "CreateMountpointResponse";
 
         //elements
         public static String E_FOLDER						= "folder";
@@ -104,7 +106,8 @@ namespace Zimbra.Client.Mail
 	    public static String E_SUBJECT = "su";
 	    public static String E_MIME_PART = "mp";
 	    public static String E_CONTENT = "content";
-	    public static String E_APPOINTMENT = "appt"; 
+	    public static String E_APPOINTMENT = "appt";
+	    public static String E_LINK = "link";
 
 
         //attributes
@@ -161,6 +164,9 @@ namespace Zimbra.Client.Mail
         public static String A_CAL_EXPAND_INST_END = "calExpandInstEnd";
 	    public static String A_VERB = "verb";
 	    public static String A_UPDATE_OGGANIZER = "updateOrganizer";
+	    public static String A_NEED_EXP = "needExp";
+	    public static String A_ZIMBRA_ID = "zid";
+	    public static String A_REMOTE_ID = "rid";
 
         //values ...
         public static String V_METTING_PARENT_FOLDER_ID = "10";
@@ -181,6 +187,7 @@ namespace Zimbra.Client.Mail
 	    public static String V_TEXT_PLAIN = "text/plain";
 	    public static String V_RELATED_START = "START";
 	    public static String V_CUTYPE_RES = "RES";
+        
 
         //qualified names
 
@@ -193,14 +200,15 @@ namespace Zimbra.Client.Mail
 			new NoOpResponse(),
 			new MsgActionResponse(), 
             new GetWorkingHoursResponse(), 
-            new SearchCalendarResourcesResponse(), 
             new GetFreeBusyResponse(),
             new CreateAppointmentResponse(),
             new SearchResponse(),
             new GetMsgResponse(),
             new CheckRecurConflictsResponse(),
             new CancelAppointmentResponse(),
-            new SendInviteReplyResponse()
+            new SendInviteReplyResponse(),
+            new AutoCompleteResponse(), 
+            new CreateMountpointResponse()
         };
 
 		//IZimbraService

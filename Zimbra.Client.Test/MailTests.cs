@@ -6,7 +6,9 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Zimbra.Client.Account;
 using Zimbra.Client.src.Mail;
 using System.Linq;
+using System.Text.RegularExpressions;
 using Itenso.TimePeriod;
+using Newtonsoft.Json.Linq;
 using Zimbra.Client.Mail;
 using Zimbra.Client.src.Account;
 
@@ -31,7 +33,7 @@ namespace Zimbra.Client.Test
             ZmailServer = "zmail.gss.com.tw";
             ZmailServerPort = 443;
             UserId = "rainmaker_ho@gss.com.tw";
-            Pwd = "你的密碼";
+            Pwd = "your pwd";
             AssignUserToken();
         }
 
@@ -122,10 +124,10 @@ namespace Zimbra.Client.Test
         [TestMethod]
         public void GetFreeBusyRequestTest()
         {
-            var sdate = new DateTime(2017, 4, 7, 08, 0, 0);
-            var edate = new DateTime(2017, 4, 7, 18, 0, 0);
+            var sdate = new DateTime(2017, 5, 10, 08, 0, 0);
+            var edate = new DateTime(2017, 5, 10, 18, 0, 0);
             //多人請用逗號隔開
-            var searchNames = "rainmaker_ho@gss.com.tw";
+            var searchNames = "allen_tu@mail.gss.com.tw";
             ZmailRequest.ApiRequest = new GetFreeBusyRequest(sdate, edate, searchNames);
             var zResquest = ZmailDispatcher.SendRequest(ZmailRequest);
             var resp = zResquest.ApiResponse as GetFreeBusyResponse;
@@ -489,14 +491,14 @@ namespace Zimbra.Client.Test
 
 
         [TestMethod]
-        [Description("取得行事曆的資訊")]
+        [Description("取得自已的行事曆的資訊")]
         public void SearchRequestTest()
         {
-            var sdate = new DateTime(2017, 4, 7, 08, 0, 0);
-            var edate = new DateTime(2017, 4, 7, 18, 0, 0);
-            var searchReqParams = new SearchRequestParams();
-            searchReqParams.LocalEnd = edate;
-            searchReqParams.LocalStart = sdate;
+            var sdate = new DateTime(2017, 5, 25, 08, 0, 0);
+            var edate = new DateTime(2017, 5, 25, 18, 0, 0);
+            var searchReqParams = new SearchRequestParams(sdate, edate);
+            //FolderId 10 預設是自已的行事曆
+            //searchReqParams.FolderId = "12654"; //501
             ZmailRequest.ApiRequest = new SearchRequest(searchReqParams);
             var zResquest = ZmailDispatcher.SendRequest(ZmailRequest);
 
@@ -507,8 +509,49 @@ namespace Zimbra.Client.Test
             {
                 foreach (var appt in appts.OrderBy(a=>a.StartTime))
                 {
-                    Console.WriteLine($"{appt.Name}:Start:{appt.StartTime}, 組織者:{appt.Organizer.DisplayName}, {appt.Organizer.Email}");
+                    Console.WriteLine($"{appt.Name}:Start:{appt.StartTime}, 組織者:{appt.Organizer?.DisplayName}, {appt.Organizer?.Email}");
                 }
+            }
+        }
+
+
+        [TestMethod]
+        [Description("取得他人的行事曆的資訊")]
+        public void SearchOtherShareAppointmentsRequestTest()
+        {
+            //先取得他人的 Mountpoint
+            var searchEmail = "allen_tu@gss.com.tw";
+            var getShareInfoRequest = new GetShareInfoRequest(searchEmail);
+            ZmailRequest.ApiRequest = getShareInfoRequest;
+            var zResquest = ZmailDispatcher.SendRequest(ZmailRequest);
+            var resp = zResquest.ApiResponse as GetShareInfoResponse;
+            var mid = resp.MountpointId;
+            if (!string.IsNullOrWhiteSpace(mid))
+            {
+                var sdate = new DateTime(2017, 5, 25, 08, 0, 0);
+                var edate = new DateTime(2017, 5, 25, 18, 0, 0);
+                var searchReqParams = new SearchRequestParams(sdate, edate);
+                //FolderId 10 預設是自已的行事曆
+                searchReqParams.FolderId = mid;
+                ZmailRequest.ApiRequest = new SearchRequest(searchReqParams);
+                zResquest = ZmailDispatcher.SendRequest(ZmailRequest);
+
+                //取出會議室的資訊
+                var searchRes = zResquest.ApiResponse as SearchResponse;
+                var appts = searchRes?.Appointments;
+                if (appts != null)
+                {
+                    foreach (var appt in appts.OrderBy(a => a.StartTime))
+                    {
+                        //註:組織者有可能為 null 
+                        Console.WriteLine(
+                            $"{appt.Name}:Start:{appt.StartTime}, 組織者:{appt.Organizer?.DisplayName}, {appt.Organizer?.Email}");
+                    }
+                }
+            }
+            else
+            {
+                Console.WriteLine($"尚未Mount {searchEmail} 行事曆");
             }
         }
 
@@ -548,8 +591,6 @@ namespace Zimbra.Client.Test
                 }
             }
         }
-
-
 
 
         [TestMethod]
@@ -602,7 +643,51 @@ namespace Zimbra.Client.Test
             var invId = resp?.InvId;
             Console.WriteLine($"InvId:{invId}");
         }
- 
+
+
+        [TestMethod]
+        [Description("透過關鍵字尋找 Email 資訊")]
+        public void AutoCompleteRequestTest()
+        {
+            var searchString = "rai";
+            ZmailRequest.ApiRequest = new AutoCompleteRequest(searchString);
+            var zResquest = ZmailDispatcher.SendRequest(ZmailRequest);
+            var resp = zResquest.ApiResponse as AutoCompleteResponse;
+            var matchList = resp.MatchList;
+            foreach (var match in matchList)
+            {
+                Console.WriteLine($"name:{match.DisplayName}, email:{match.Email} ");
+            }
+             
+        }
+
+
+        [TestMethod]
+        [Description("透過 Email 取得分享的行事曆，並加入掛載到自已身上")]
+        public void CreateMountpointRequestTest()
+        {
+            var ownerEmail = "perry_chang@gss.com.tw";
+            var getShareInfoRequest = new GetShareInfoRequest(ownerEmail);
+
+            ZmailRequest.ApiRequest = getShareInfoRequest;
+            var zResquest = ZmailDispatcher.SendRequest(ZmailRequest);
+            var resp = zResquest.ApiResponse as GetShareInfoResponse;
+            var mid = resp.MountpointId;
+            var ownerId = resp.OwnerId;
+            if (string.IsNullOrWhiteSpace(mid))
+            {
+                var ownerName = $"{resp.OwnerName}'s Calendar";
+                var req = new CreateMountpointRequest();
+                req.OwnerId = ownerId;
+                req.MountDisplayName = ownerName;
+
+                ZmailRequest.ApiRequest = req;
+                zResquest = ZmailDispatcher.SendRequest(ZmailRequest);
+                var resp2 = zResquest.ApiResponse as CreateMountpointResponse;
+                Console.WriteLine($"是否成功? {resp2.CreateSuccess}");
+            }
+
+        }
     }
 
     

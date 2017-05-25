@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Text;
 using System.Xml;
 using Zimbra.Client.Account;
-using Zimbra.Client.Mail;
 using Zimbra.Client.Util;
 
 namespace Zimbra.Client.src.Account

@@ -1,5 +1,5 @@
-﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<NDepend AppName="Zimbra.Client" Platform="DotNet" FileWrittenByProductVersion="2017.1.1.8920">
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<NDepend AppName="Zimbra.Client" Platform="DotNet" FileWrittenByProductVersion="2017.2.1.8955">
   <OutputDir KeepXmlFiles="False">C:\projects\ZimbraCSharpClient\ZimbraCSharpClient\NDependOut</OutputDir>
   <Assemblies>
     <Name>Zimbra.Client</Name>
@@ -9,18 +9,21 @@
     <Name>mscorlib</Name>
     <Name>System.Xml</Name>
     <Name>System</Name>
+    <Name>System.Core</Name>
   </FrameworkAssemblies>
   <Dirs>
-    <Dir>C:\projects\ZimbraCSharpClient\ZimbraCSharpClient\bin\Debug</Dir>
-    <Dir>C:\projects\ZimbraCSharpClient\zimbraClientTest\bin\Debug</Dir>
     <Dir>C:\Windows\Microsoft.NET\Framework\v4.0.30319</Dir>
     <Dir>C:\Windows\Microsoft.NET\Framework\v4.0.30319\WPF</Dir>
+    <Dir>C:\projects\ZimbraCSharpClient\ZimbraCSharpClient\bin\Debug</Dir>
+    <Dir>C:\projects\ZimbraCSharpClient\zimbraClientTest\bin\Debug</Dir>
   </Dirs>
   <MergeCodeGeneratedByCompiler>True</MergeCodeGeneratedByCompiler>
   <Report Kind="0" SectionsEnabled="110591" XslPath="" Flags="261120" />
   <BuildComparisonSetting ProjectMode="CurrentProject" BuildMode="NDaysAgoAnalysisResult" ProjectFileToCompareWith="" BuildFileToCompareWith="" NDaysAgo="30" />
   <BaselineInUISetting ProjectMode="CurrentProject" BuildMode="NDaysAgoAnalysisResult" ProjectFileToCompareWith="" BuildFileToCompareWith="" NDaysAgo="30" />
-  <CoverageFiles CoverageDir="" UncoverableAttribute="" />
+  <CoverageFiles CoverageDir="" UncoverableAttribute="">
+    <CoverageFile>C:\projects\ZimbraCSharpClient\2017-05-04 15_08_45.coveragexml</CoverageFile>
+  </CoverageFiles>
   <TrendMetrics UseCustomLog="False" LogRecurrence="3" LogLabel="2" UseCustomDir="False" CustomDir="">
     <Chart Name="Size" ShowInReport="True">
       <Serie MetricName="# Lines of Code" MetricUnit="Loc" Color="#FF00BFFF" ChartType="Line" ScaleExp="0" />
@@ -75,13 +78,12 @@
       <B2C_RatingThreshold>10</B2C_RatingThreshold>
       <C2D_RatingThreshold>20</C2D_RatingThreshold>
       <D2E_RatingThreshold>50</D2E_RatingThreshold>
-      <Info2Minor_SeverityThreshold>1200000000</Info2Minor_SeverityThreshold>
-      <Minor2Major_SeverityThreshold>12000000000</Minor2Major_SeverityThreshold>
-      <Major2Critical_SeverityThreshold>72000000000</Major2Critical_SeverityThreshold>
+      <Low2Medium_SeverityThreshold>1200000000</Low2Medium_SeverityThreshold>
+      <Medium2High_SeverityThreshold>12000000000</Medium2High_SeverityThreshold>
+      <High2Critical_SeverityThreshold>72000000000</High2Critical_SeverityThreshold>
       <Critical2Blocker_SeverityThreshold>360000000000</Critical2Blocker_SeverityThreshold>
     </DebtSettings>
-  </ProjectDebtSettings>
-  <Queries>
+  </ProjectDebtSettings><Queries>
     <Group Name="Quality Gates" Active="True" ShownInReport="True">
       <Query Active="True" DisplayList="True" DisplayStat="True" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[// <Name>Quality Gates Evolution</Name>
 from qg in QualityGates
@@ -10915,6 +10917,4 @@ select new {
 //</HowToFix>]]></Query>
       </Group>
     </Group>
-  </Queries>
-  <WarnFilter />
-</NDepend>
+  </Queries></NDepend>

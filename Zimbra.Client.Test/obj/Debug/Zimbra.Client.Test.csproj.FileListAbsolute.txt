@@ -17,3 +17,5 @@ C:\projects\ZimbraCSharpClient\Zimbra.Client.Test\bin\Debug\de\Itenso.TimePeriod
 C:\projects\ZimbraCSharpClient\Zimbra.Client.Test\obj\Debug\Zimbra.Client.Test.csprojResolveAssemblyReference.cache
 C:\projects\ZimbraCSharpClient\Zimbra.Client.Test\obj\Debug\Zimbra.Client.Test.dll
 C:\projects\ZimbraCSharpClient\Zimbra.Client.Test\obj\Debug\Zimbra.Client.Test.pdb
+C:\projects\ZimbraCSharpClient\Zimbra.Client.Test\bin\Debug\Newtonsoft.Json.dll
+C:\projects\ZimbraCSharpClient\Zimbra.Client.Test\bin\Debug\Newtonsoft.Json.xml

@@ -155,19 +155,24 @@ namespace Zimbra.Client.src.Mail
         }
         
         public SearchRequestParams()
+        {}
+
+
+        public SearchRequestParams(DateTime startTime, DateTime endTime)
         {
-            this.FolderId = MailService.V_METTING_PARENT_FOLDER_ID;
-            this.SortBy = EmuSortBy.dateAsc;
-            this.Type = EmuTypes.appointment;
+            LocalStart = startTime;
+            LocalEnd = endTime;
         }
+
+
         public DateTime LocalStart { get; set; }
 
         public DateTime LocalEnd { get; set; }
 
-        public string FolderId { get; set; }
+        public string FolderId { get; set; } = MailService.V_METTING_PARENT_FOLDER_ID;
 
-        public EmuSortBy SortBy { get; set; }
+        public EmuSortBy SortBy { get; set; } = EmuSortBy.dateAsc;
 
-        public EmuTypes Type { get; set; }
+        public EmuTypes Type { get; set; } = EmuTypes.appointment;
     }
 }

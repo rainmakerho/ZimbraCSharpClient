@@ -8,6 +8,8 @@
 | 功能 | 說明 | Services |
 | ------ | ------ | ------ |
 | SearchCalendarResources | 找資源，例如會議室、車子 ... | Account |
+| SearchGal | 依關鍵字 Search Email 資訊 | Account |
+| GetShareInfo | 取得使用者分享的 Folder 資訊，在gss是 folderPath=/Calendar  | Account |
 | GetWorkingHours | 取得可上班時間(似乎沒什麼用) | Mail |
 | GetFreeBusy | 取得每個人的Free or Busy 時間 | Mail |
 | CreateAppointment | Book 會議室 | Mail |
@@ -16,6 +18,8 @@
 | CheckRecurConflicts | 檢查行事曆是否有衝突，一般用在 book 之前，先check | Mail |
 | CancelAppointment | 取消會議(組織者才能使用) | Mail |
 | SendInviteReply | 回覆會議(ACCEPT,DECLINE,TENTATIVE) | Mail |
+| CreateMountpoint | 透過 Email 取得分享的行事曆，並加入掛載到自已身上 | Mail |
+| AutoComplete | 透過關鍵字尋找 Email 資訊  | Mail |
  
 ## Zimbra.Client.Test 為測試專案
 ### Initialize Method 設定 Zimbra 的登入資訊 
@@ -143,6 +147,47 @@ public void AuthRequesFromTokenTest()
 		}
 	}
 	
+}
+
+[TestMethod]
+[Description("Search Email 帳號 Info")]
+public void SearchCalTest()
+{
+	var searchString = "al";
+	var searchCalReq = new SearchGalRequest(searchString);
+	 
+	ZmailRequest.ApiRequest = searchCalReq;
+	var zResquest = ZmailDispatcher.SendRequest(ZmailRequest);
+	var resp = zResquest.ApiResponse as SearchGalResponse;
+	var crList = resp?.CalendarResourceList;
+	if (crList != null)
+	{
+		foreach (var cr in crList)
+		{
+			Console.WriteLine($"cnid:{cr.id}");
+			Console.WriteLine($"fullName:{cr.AttributesList["fullName"]}, email:{cr.AttributesList["email"]}");
+			//Console.WriteLine(string.Join(Environment.NewLine, cr.AttributesList.Select(x => x.Key + "=" + x.Value).ToArray()));
+		}
+	}
+}
+
+
+[TestMethod]
+[Description("取得分享的 Folder 資訊，在gss是 folderPath=/Calendar ")]
+public void GetShareInfoTest()
+{
+	var ownerEmail = "robin_wang@gss.com.tw";
+	var getShareInfoRequest = new GetShareInfoRequest(ownerEmail);
+
+	ZmailRequest.ApiRequest = getShareInfoRequest;
+	var zResquest = ZmailDispatcher.SendRequest(ZmailRequest);
+	var resp = zResquest.ApiResponse as GetShareInfoResponse;
+	var mid = resp.MountpointId;
+	var ownerId = resp.OwnerId;
+	//如果回傳mid為null的話，表示沒有加入被查詢人員的行事曆哦!
+	//可透過 CreateMountpoint 建立
+	Console.WriteLine($"MountpointId:{mid}");
+	Console.WriteLine($"OwnerId:{ownerId}");
 }
 
 ```
@@ -572,6 +617,51 @@ public void GetFreeBusyRequestTimePeriodIntersectorTest()
 
 	
 }
+
+
+[TestMethod]
+[Description("透過 Email 取得分享的行事曆，並加入掛載到自已身上 ")]
+public void CreateMountpointRequestTest()
+{
+	var ownerEmail = "perry_chang@gss.com.tw";
+	var getShareInfoRequest = new GetShareInfoRequest(ownerEmail);
+
+	ZmailRequest.ApiRequest = getShareInfoRequest;
+	var zResquest = ZmailDispatcher.SendRequest(ZmailRequest);
+	var resp = zResquest.ApiResponse as GetShareInfoResponse;
+	var mid = resp.MountpointId;
+	var ownerId = resp.OwnerId;
+	if (string.IsNullOrWhiteSpace(mid))
+	{
+		var ownerName = $"{resp.OwnerName}'s Calendar";
+		var req = new CreateMountpointRequest();
+		req.OwnerId = ownerId;
+		req.MountDisplayName = ownerName;
+
+		ZmailRequest.ApiRequest = req;
+		zResquest = ZmailDispatcher.SendRequest(ZmailRequest);
+		var resp2 = zResquest.ApiResponse as CreateMountpointResponse;
+		Console.WriteLine($"是否成功? {resp2.CreateSuccess}");
+	}
+
+}
+
+[TestMethod]
+[Description("透過關鍵字尋找 Email 資訊")]
+public void AutoCompleteRequestTest()
+{
+	var searchString = "rai";
+	ZmailRequest.ApiRequest = new AutoCompleteRequest(searchString);
+	var zResquest = ZmailDispatcher.SendRequest(ZmailRequest);
+	var resp = zResquest.ApiResponse as AutoCompleteResponse;
+	var matchList = resp.MatchList;
+	foreach (var match in matchList)
+	{
+		Console.WriteLine($"name:{match.DisplayName}, email:{match.Email} ");
+	}
+	 
+}
+
 ```
 
 * 測試版本為 7.2.4
@@ -579,3 +669,6 @@ public void GetFreeBusyRequestTimePeriodIntersectorTest()
 參考資訊
 [ZimbraTM SOAP API Reference 8.0.0_GA_5424](https://files.zimbra.com/docs/soap_api/8.0/soapapi-zimbra-doc/api-reference/overview-summary.html)
 [Zimbra Toaster](https://sourceforge.net/projects/zimbratoaster/files/Windows/)
+
+
+

@@ -53,7 +53,8 @@ namespace Zimbra.Client.Test
         }
 
         [TestMethod]
-        public void AuthRequesTest()
+        [Description("取得 Token ")]
+        public string AuthRequesTest()
         {
             var zmailDispatcher = new Dispatcher(ZmailServer, ZmailServerPort, true, true);
             var zRequestContext = new RequestContext();
@@ -64,6 +65,7 @@ namespace Zimbra.Client.Test
             Console.WriteLine(zAuthToken);
 
             Assert.IsTrue($"{zAuthToken}" != string.Empty);
+            return zAuthToken;
         }
 
 
@@ -73,8 +75,7 @@ namespace Zimbra.Client.Test
         {
             var zmailDispatcher = new Dispatcher(ZmailServer, ZmailServerPort, true, true);
             var zRequestContext = new RequestContext();
-            var token =
-                "0_4a49f1723bbe362456559c61f44025358b4fe1a3_69643d33363a61666464306130302d663739332d343737652d626662632d3136353938373536633038623b6578703d31333a313439323036333138373336373b747970653d363a7a696d6272613b";
+            var token = AuthRequesTest();
             zRequestContext.AuthToken = token;
             //測試使用 Token
             var calendarAttributes ="fullName,email";
@@ -188,6 +189,49 @@ namespace Zimbra.Client.Test
                     Console.WriteLine(string.Join(Environment.NewLine, cr.AttributesList.Select(x => x.Key + "=" + x.Value).ToArray()));
                 }
             }
+        }
+
+
+        [TestMethod]
+        [Description("Search Email 帳號 Info")]
+        public void SearchCalTest()
+        {
+            var searchString = "al";
+            var searchCalReq = new SearchGalRequest(searchString);
+             
+            ZmailRequest.ApiRequest = searchCalReq;
+            var zResquest = ZmailDispatcher.SendRequest(ZmailRequest);
+            var resp = zResquest.ApiResponse as SearchGalResponse;
+            var crList = resp?.CalendarResourceList;
+            if (crList != null)
+            {
+                foreach (var cr in crList)
+                {
+                    Console.WriteLine($"cnid:{cr.id}");
+                    Console.WriteLine($"fullName:{cr.AttributesList["fullName"]}, email:{cr.AttributesList["email"]}");
+                    //Console.WriteLine(string.Join(Environment.NewLine, cr.AttributesList.Select(x => x.Key + "=" + x.Value).ToArray()));
+                }
+            }
+        }
+
+
+
+        [TestMethod]
+        [Description("取得使用者分享的 Folder 資訊，在gss是 folderPath=/Calendar ")]
+        public void GetShareInfoTest()
+        {
+            var ownerEmail = "robin_wang@gss.com.tw";
+            var getShareInfoRequest = new GetShareInfoRequest(ownerEmail);
+
+            ZmailRequest.ApiRequest = getShareInfoRequest;
+            var zResquest = ZmailDispatcher.SendRequest(ZmailRequest);
+            var resp = zResquest.ApiResponse as GetShareInfoResponse;
+            var mid = resp.MountpointId;
+            var ownerId = resp.OwnerId;
+            //如果回傳mid為null的話，表示沒有加入被查詢人員的行事曆哦!
+            //可透過 CreateMountpoint 建立
+            Console.WriteLine($"MountpointId:{mid}");
+            Console.WriteLine($"OwnerId:{ownerId}");
         }
     }
 }

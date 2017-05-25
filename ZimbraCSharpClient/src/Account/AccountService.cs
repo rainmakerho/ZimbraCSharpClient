@@ -23,6 +23,7 @@
  * ***** END LICENSE BLOCK *****
  */
 using System;
+using Zimbra.Client.src.Account;
 
 
 namespace Zimbra.Client.Account
@@ -42,6 +43,7 @@ namespace Zimbra.Client.Account
         //add by rainmaker
         public static String SEARCH_CALENDAR_RESOURCES_REQUEST = "SearchCalendarResourcesRequest";
 
+	    public static String GET_SHARE_INFO_REQUEST = "GetShareInfoRequest";
         
 
         //responses
@@ -50,7 +52,7 @@ namespace Zimbra.Client.Account
 
         //add by rainmaker
         public static String SEARCH_CALENDAR_RESOURCES_RESPONSE = "SearchCalendarResourcesResponse";
-
+	    public static String GET_SHARE_INFO_RESPONSE = "GetShareInfoResponse";
 
         //element names
         public static String E_ACCOUNT		= "account";
@@ -64,9 +66,9 @@ namespace Zimbra.Client.Account
         public static string E_SEARCH_FILTER = "searchFilter";
         public static string E_CONDS = "conds";
         public static string E_COND = "cond";
+	    public static string E_OWNER = "owner";
 
-        
-      
+
 
 
         //attribute names
@@ -85,6 +87,10 @@ namespace Zimbra.Client.Account
         public static string A_VALUE = "value";
         
         public static String A_OP = "op";
+	    public static String A_TYPE = "type";
+	    public static String A_M_ID = "mid";
+	    public static String A_OWNER_ID = "ownerId";
+	    public static String A_OWNER_NAME = "ownerName";
 
         //attribute Values
         public static string V_ATTR_CALRES_TYPE = "zimbraCalResType";
@@ -92,12 +98,22 @@ namespace Zimbra.Client.Account
 	    public static string V_EQUIPMENT = "Equipment";
         public static string V_DEFAULT_CALENDAR_ATTRS = "email,fullName";
 
+	    public static string V_ATTR_ACCOUNT = "account";
+	    public static string V_ATTR_NAME = "name";
+
         //qualified names
         public static String Q_AUTHTOKEN	= NS_PREFIX + ":" + E_AUTHTOKEN;
 		public static String Q_LIFETIME		= NS_PREFIX + ":" + E_LIFETIME;
 		public static String Q_SESSIONID	= NS_PREFIX + ":" + E_SESSIONID;
 
-        public static Response[] responses = { new AuthResponse() };
+        public static Response[] responses =
+        {
+            new AuthResponse(),
+            new SearchCalendarResourcesResponse(),
+            new SearchGalResponse(), 
+            new GetShareInfoResponse(), 
+
+        };
 		public String NamespacePrefix{ get{ return NS_PREFIX; }}
 		public String NamepsaceUri{ get{ return NAMESPACE_URI; }}
 		public Response[] Responses{get{ return responses;}}
