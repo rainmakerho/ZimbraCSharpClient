@@ -688,6 +688,36 @@ namespace Zimbra.Client.Test
             }
 
         }
+
+
+
+        [TestMethod]
+        [Description("新增行事曆，訂會議室 及 公務車, 還有其他人")]
+        public void CreateAppointmentRequestBookTestWithResource()
+        {
+            var app = new AppointmentRequestParams();
+            app.Subject = " 到小琉球玩 ";
+            app.StartDate = new DateTime(2017, 6, 4, 14, 0, 0);
+            app.EndDate = new DateTime(2017, 6, 4, 15, 00, 0);
+            app.Organizer = new Attendee { DisplayName = "RM", Email = "rainmaker_ho@gss.com.tw" };
+            app.Locations = new List<Attendee>{
+                new Attendee{ DisplayName = "協志會議室-舞蝶館",Email = "room_xz_01@gss.com.tw"}
+            };
+            app.Attendees = new List<Attendee>{
+
+                new Attendee { Email = "jennifer_yang@gss.com.tw", DisplayName = "丸子姐" } 
+            };
+ 
+            app.Resources = new List<Attendee>{
+                new Attendee { Email = "car_toyota_altis_g2@gss.com.tw", DisplayName = "公務車-玩命關頭" }
+            };
+ 
+            ZmailRequest.ApiRequest = new CreateAppointmentRequest(app);
+            var zResquest = ZmailDispatcher.SendRequest(ZmailRequest);
+            var resp = zResquest.ApiResponse as CreateAppointmentResponse;
+            var appResp = resp?.AppointmentResponse;
+            Console.WriteLine($"{appResp?.InviteMessageId}");
+        }
     }
 
     

@@ -95,10 +95,21 @@ namespace Zimbra.Client.src.Mail
                 at.SetAttribute(MailService.A_RSVP, MailService.V_TRUE);
                 at.SetAttribute(MailService.A_EMAIL, attendee.Email);
                 at.SetAttribute(MailService.A_DISPLAY_NAME, attendee.DisplayName);
+                at.SetAttribute(MailService.A_CUTYPE, MailService.V_CUTYPE_RES);
                 comp.AppendChild(at);
             }
 
-
+            //Resource 車、投影機 ...
+            foreach (var resource in appointment.Attendees)
+            {
+                var at = doc.CreateElement(MailService.E_ATTENDEES, MailService.NAMESPACE_URI);
+                at.SetAttribute(MailService.A_ROLE, MailService.V_ROLE_NON);
+                at.SetAttribute(MailService.A_PARTICIPATION_STATUS, MailService.V_PARTICIPATION_STATUS_NE);
+                at.SetAttribute(MailService.A_RSVP, MailService.V_TRUE);
+                at.SetAttribute(MailService.A_EMAIL, resource.Email);
+                at.SetAttribute(MailService.A_DISPLAY_NAME, resource.DisplayName);
+                comp.AppendChild(at);
+            }
 
 
             var start = appointment.StartDate;
@@ -146,6 +157,16 @@ namespace Zimbra.Client.src.Mail
                 m.AppendChild(at);
             }
 
+            //Resource 車、投影機 ...
+            foreach (var resource in appointment?.Resources)
+            {
+                var at = doc.CreateElement(MailService.E_EMAIL, MailService.NAMESPACE_URI);
+                at.SetAttribute(MailService.A_EMAIL, resource.Email);
+                at.SetAttribute(MailService.A_NAME_PART, resource.DisplayName);
+                at.SetAttribute(MailService.A_TYPE, MailService.V_TO);
+                m.AppendChild(at);
+            }
+
             or = doc.CreateElement(MailService.E_EMAIL, MailService.NAMESPACE_URI);
             or.SetAttribute(MailService.A_EMAIL, appointment.Organizer.Email);
             or.SetAttribute(MailService.A_DISPLAY_NAME, appointment.Organizer.DisplayName);
@@ -173,21 +194,37 @@ namespace Zimbra.Client.src.Mail
             var mpPlain = doc.CreateElement(MailService.E_MIME_PART, MailService.NAMESPACE_URI);
             mpPlain.SetAttribute(MailService.A_CONTENT_TYPE, MailService.V_TEXT_PLAIN);
             var contentPlain = doc.CreateElement(MailService.E_CONTENT, MailService.NAMESPACE_URI);
-            var contentString = "以下為新會議請求：" + Environment.NewLine +
-                                $"主題﹕ {appointment.Subject}" +
-                                $"組織者: '{appointment.Organizer.DisplayName}' <{appointment.Organizer.Email}>" +
-                                Environment.NewLine +
-                                Environment.NewLine +
-                                $"地點﹕ '{locations}>" +
-                                Environment.NewLine +
-                                $"時間: {appointment.StartDate} To {appointment.EndDate}" + Environment.NewLine +
-                                Environment.NewLine +
-                                $"受邀人: {appointment.Attendees.Aggregate<Attendee, string>(string.Empty, (x, y) => x.Length > 0 ? x + MailService.SEMICOLON : x)}" +
-                                Environment.NewLine + Environment.NewLine +
-                                "*~*~*~*~*~*~*~*~*~*" + Environment.NewLine + Environment.NewLine +
-                                $"{appointment.Body}";
+            var contentString = new StringBuilder();
+            contentString.AppendLine("以下為新會議請求：");
+            contentString.AppendLine($"主題﹕ {appointment.Subject}");
+            contentString.AppendLine($"組織者: {appointment.Organizer.DisplayName} <{appointment.Organizer.Email}>");
+            contentString.AppendLine("");
+            if (!string.IsNullOrWhiteSpace(locations))
+            {
+                contentString.AppendLine($"地點﹕{locations} ");
+            }
 
-            contentPlain.InnerText = contentString;
+            if (appointment.Resources.Any())
+            {
+                var resources = appointment.Resources.Aggregate<Attendee, string>(string.Empty,
+                    (x, y) => x + (x.Length > 0 ? MailService.SEMICOLON + y.DisplayName + " <" + y.Email + "> " : y.DisplayName + " <" + y.Email + "> "));
+                contentString.AppendLine($"資源: {resources}");
+            }
+            
+            contentString.AppendLine($"時間: {appointment.StartDate} To {appointment.EndDate}");
+
+            if (appointment.Attendees.Any())
+            {
+                var attendees = appointment.Attendees.Aggregate<Attendee, string>(string.Empty,
+                    (x, y) => x + (x.Length > 0 ? MailService.SEMICOLON + y.DisplayName + " <" + y.Email + "> " : y.DisplayName + " <" + y.Email + "> "));
+
+                contentString.AppendLine($"受邀人: {attendees}");
+            }
+            
+            contentString.AppendLine("*~*~*~*~*~*~*~*~*~*" + Environment.NewLine + Environment.NewLine);
+            contentString.AppendLine($"{appointment.Body}");
+
+            contentPlain.InnerText = contentString.ToString();
             mpPlain.AppendChild(contentPlain);
             mp.AppendChild(mpPlain);
             m.AppendChild(mp);
@@ -259,6 +296,9 @@ namespace Zimbra.Client.src.Mail
         public List<Attendee> Locations { get; set; }
 
         public List<Attendee> Attendees { get; set; }
+
+
+        public List<Attendee> Resources { get; set; }
 
         public DateTime StartDate { get; set; }
 
