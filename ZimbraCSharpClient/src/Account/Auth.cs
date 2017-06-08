@@ -36,6 +36,12 @@ namespace Zimbra.Client.Account
 	{
 		private String accountName;
 		private String password;
+	    private String token;
+
+	    public AuthRequest(String token)
+	    {
+	        this.token = token;
+	    }
 
 		public AuthRequest(String account, String password)
 		{
@@ -50,18 +56,32 @@ namespace Zimbra.Client.Account
 			//create the AuthRequest node
 			XmlElement requestNode = doc.CreateElement( AccountService.AUTH_REQUEST, AccountService.NAMESPACE_URI);
 
-			//create & config the account node
-			XmlElement accountNode = doc.CreateElement( AccountService.E_ACCOUNT, AccountService.NAMESPACE_URI );
-			accountNode.SetAttribute( AccountService.A_BY, AccountService.A_NAME );
-			accountNode.InnerText = accountName;
+		    if (string.IsNullOrWhiteSpace(this.token))
+		    {
+		        //要取得token
+		        //create & config the account node
+		        XmlElement accountNode = doc.CreateElement(AccountService.E_ACCOUNT, AccountService.NAMESPACE_URI);
+		        accountNode.SetAttribute(AccountService.A_BY, AccountService.A_NAME);
+		        accountNode.InnerText = accountName;
 
-			//create and config the password node
-			XmlElement pwdNode = doc.CreateElement( AccountService.E_PASSWORD, AccountService.NAMESPACE_URI );
-			pwdNode.InnerText = password;
+		        //create and config the password node
+		        XmlElement pwdNode = doc.CreateElement(AccountService.E_PASSWORD, AccountService.NAMESPACE_URI);
+		        pwdNode.InnerText = password;
 
-			//add em together...
-			requestNode.AppendChild( accountNode );
-			requestNode.AppendChild( pwdNode );
+		        //add em together...
+		        requestNode.AppendChild(accountNode);
+		        requestNode.AppendChild(pwdNode);
+		    }
+		    else
+		    {
+                //要驗證 token 是否有效
+		        var tokenNode = doc.CreateElement(AccountService.E_AUTHTOKEN, AccountService.NAMESPACE_URI);
+		        tokenNode.InnerText = this.token;
+		        requestNode.AppendChild(tokenNode);
+            }
+			
+
+
 			doc.AppendChild( requestNode );
 
 			return doc;

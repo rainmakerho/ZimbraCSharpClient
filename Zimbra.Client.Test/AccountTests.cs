@@ -63,11 +63,43 @@ namespace Zimbra.Client.Test
             var zResquest = zmailDispatcher.SendRequest(zmailRequest);
             var zAuthToken = (zResquest.ApiResponse as AuthResponse)?.AuthToken;
             Console.WriteLine(zAuthToken);
-
+            Console.WriteLine((zResquest.ApiResponse as AuthResponse)?.LifeTime);
             Assert.IsTrue($"{zAuthToken}" != string.Empty);
             return zAuthToken;
         }
 
+        [TestMethod]
+        [Description("取得 Token ")]
+        public void AuthRequesTest2()
+        {
+            var zmailDispatcher = new Dispatcher(ZmailServer, ZmailServerPort, true, true);
+            var zRequestContext = new RequestContext();
+            var zAuthRequest = new AuthRequest(UserId, Pwd);
+            var zmailRequest = new RequestEnvelope(zRequestContext, zAuthRequest);
+            var zResquest = zmailDispatcher.SendRequest(zmailRequest);
+            var zAuthToken = (zResquest.ApiResponse as AuthResponse)?.AuthToken;
+            Console.WriteLine(zAuthToken);
+            Console.WriteLine((zResquest.ApiResponse as AuthResponse)?.LifeTime);
+            Assert.IsTrue($"{zAuthToken}" != string.Empty);
+            
+        }
+
+        [TestMethod]
+        [Description("傳入 token 驗證 token 的有效性")]
+        [ExpectedException(typeof(ZimbraException), "auth credentials have expired")]
+        public void AuthRequesTestTokenValidate()
+        {
+            var zmailDispatcher = new Dispatcher(ZmailServer, ZmailServerPort, true, true);
+            var zRequestContext = new RequestContext();
+            string token = "0_83bbf557b587c222bb534fe06e3b70644809d652_69643d33363a61666464306130302d663739332d343737652d626662632d3136353938373536633038623b6578703d31333a313439313132353035353033363b747970653d363a7a696d6272613b";
+            var zAuthRequest = new AuthRequest(token);
+            var zmailRequest = new RequestEnvelope(zRequestContext, zAuthRequest);
+            var zResquest = zmailDispatcher.SendRequest(zmailRequest);
+            var zAuthToken = (zResquest.ApiResponse as AuthResponse)?.AuthToken;
+            Console.WriteLine(zAuthToken);
+            Console.WriteLine((zResquest.ApiResponse as AuthResponse)?.LifeTime);
+            Assert.IsTrue($"{zAuthToken}" != string.Empty);
+        }
 
         [TestMethod]
         [Description("依Token去Request")]
