@@ -30,9 +30,9 @@ namespace Zimbra.Client.Test
         [TestInitialize()]
         public void Initialize()
         {
-            ZmailServer = "zmail.gss.com.tw";
+            ZmailServer = "your mail server";
             ZmailServerPort = 443;
-            UserId = "rainmaker_ho@gss.com.tw";
+            UserId = "rm@gss.com.tw";
             Pwd = "your pwd";
             AssignUserToken();
         }
@@ -56,7 +56,7 @@ namespace Zimbra.Client.Test
             var sdate = new DateTime(2017, 4, 7, 08, 0, 0);
             var edate = new DateTime(2017, 4, 7, 18, 0, 0);
             //多人請用逗號隔開
-            var searchNames = "rainmaker_ho@gss.com.tw,alice_lai@gss.com.tw";
+            var searchNames = "rm@gss.com.tw,alice_lai@gss.com.tw";
             ZmailRequest.ApiRequest = new GetWorkingHoursRequest(sdate, edate, searchNames);
             var zResquest = ZmailDispatcher.SendRequest(ZmailRequest);
             var resp = zResquest.ApiResponse as GetWorkingHoursResponse;
@@ -92,7 +92,7 @@ namespace Zimbra.Client.Test
             var sdate = new DateTime(2017, 4, 7, 18, 0, 0);
             var edate = new DateTime(2017, 4, 7, 18, 0, 0);
             //多人請用逗號隔開
-            var searchNames = "rainmaker_ho@gss.com.tw";
+            var searchNames = "rm@gss.com.tw";
             ZmailRequest.ApiRequest = new GetWorkingHoursRequest(sdate, edate, searchNames);
             var zResquest = ZmailDispatcher.SendRequest(ZmailRequest);
             var resp = zResquest.ApiResponse as GetWorkingHoursResponse;
@@ -178,7 +178,7 @@ namespace Zimbra.Client.Test
                 var edate = sdate.AddDays(7);
                 //多人請用逗號隔開
                 var crEmailStrings = string.Join(",", crEmails.ToArray());
-                var searchNames = "rainmaker_ho@gss.com.tw,teresa_hua@gss.com.tw," + crEmailStrings;
+                var searchNames = "rm@gss.com.tw,teresa_hua@gss.com.tw," + crEmailStrings;
                 ZmailRequest.ApiRequest = new GetFreeBusyRequest(sdate, edate, searchNames);
                 var zResquest = ZmailDispatcher.SendRequest(ZmailRequest);
                 var resp = zResquest.ApiResponse as GetFreeBusyResponse;
@@ -271,7 +271,7 @@ namespace Zimbra.Client.Test
             var sdate = new DateTime(2017, 4, 7, 08, 0, 0);
             var edate = new DateTime(2017, 4, 7, 08, 0, 0);
             //多人請用逗號隔開
-            var searchNames = "rainmaker_ho@gss.com.tw";
+            var searchNames = "rm@gss.com.tw";
             ZmailRequest.ApiRequest = new GetFreeBusyRequest(sdate, edate, searchNames);
             var zResquest = ZmailDispatcher.SendRequest(ZmailRequest);
             var resp = zResquest.ApiResponse as GetFreeBusyResponse;
@@ -310,7 +310,7 @@ namespace Zimbra.Client.Test
             app.Subject = "到台灣銀行洽工 ";
             app.StartDate = new DateTime(2017, 4, 11, 08, 30, 0);
             app.EndDate = new DateTime(2017, 4, 11, 12, 00, 0);
-            app.Organizer = new Attendee { Email = "rainmaker_ho@gss.com.tw", DisplayName = "亂馬客" };
+            app.Organizer = new Attendee { Email = "rm@gss.com.tw", DisplayName = "亂馬客" };
              
             ZmailRequest.ApiRequest = new CreateAppointmentRequest(app);
             var zResquest = ZmailDispatcher.SendRequest(ZmailRequest);
@@ -329,7 +329,7 @@ namespace Zimbra.Client.Test
             appCancelParam.Id = "32326-32325";
             appCancelParam.Attendees = new List<Attendee>
             {
-                new Attendee{Email="rainmaker_ho@gss.com.tw"}
+                new Attendee{Email="rm@gss.com.tw"}
             };
             ZmailRequest.ApiRequest = new CancelAppointmentRequest(appCancelParam);
             var zResquest = ZmailDispatcher.SendRequest(ZmailRequest);
@@ -346,7 +346,7 @@ namespace Zimbra.Client.Test
             app.Subject = "到台灣銀行洽工 ";
             app.StartDate = new DateTime(2017, 4, 11, 08, 30, 0);
             app.EndDate = new DateTime(2017, 4, 11, 12, 00, 0);
-            app.Organizer = new Attendee { Email = "rainmaker_ho@gss.com.tw", DisplayName = "亂馬客" };
+            app.Organizer = new Attendee { Email = "rm@gss.com.tw", DisplayName = "亂馬客" };
 
             ZmailRequest.ApiRequest = new CreateAppointmentRequest(app);
             var zResquest = ZmailDispatcher.SendRequest(ZmailRequest);
@@ -377,7 +377,7 @@ namespace Zimbra.Client.Test
             app.Subject = "開會，新增行事曆，訂會議室 測試";
             app.StartDate = new DateTime(2017, 4, 6, 9, 30, 0);
             app.EndDate = new DateTime(2017, 4, 6, 10, 30, 0);
-            app.Organizer = new Attendee { Email = "rainmaker_ho@gss.com.tw", DisplayName = "亂馬客" };
+            app.Organizer = new Attendee { Email = "rm@gss.com.tw", DisplayName = "亂馬客" };
             app.Locations = new List<Attendee>{
                 new Attendee{ DisplayName = "協志會議室-舞蝶館",Email = "room_xz_01@gss.com.tw"}
             };
@@ -398,7 +398,7 @@ namespace Zimbra.Client.Test
             app.Subject = "開會，新增行事曆，訂會議室 測試";
             app.StartDate = new DateTime(2017, 4, 6, 9, 30, 0);
             app.EndDate = new DateTime(2017, 4, 6, 10, 30, 0);
-            app.Organizer = new Attendee { Email = "rainmaker_ho@gss.com.tw", DisplayName = "亂馬客" };
+            app.Organizer = new Attendee { Email = "rm@gss.com.tw", DisplayName = "亂馬客" };
             app.Locations = new List<Attendee>{
                 new Attendee{ DisplayName = "協志會議室-舞蝶館",Email = "room_xz_01@gss.com.tw"}
             };
@@ -434,7 +434,7 @@ namespace Zimbra.Client.Test
             app.Subject = "開會，新增行事曆，訂會議室  ";
             app.StartDate = new DateTime(2017, 4, 6, 13,0, 0);
             app.EndDate = new DateTime(2017, 4, 6, 14, 00, 0);
-            app.Organizer = new Attendee {DisplayName = "RM", Email = "rainmaker_ho@gss.com.tw"};
+            app.Organizer = new Attendee {DisplayName = "RM", Email = "rm@gss.com.tw"};
             app.Locations = new List<Attendee>{
                 new Attendee{ DisplayName = "協志會議室-舞蝶館",Email = "room_xz_01@gss.com.tw"}
             };
@@ -458,7 +458,7 @@ namespace Zimbra.Client.Test
             app.Subject = "開會，新增行事曆，訂會議室  ";
             app.StartDate = new DateTime(2017, 4, 6, 13, 0, 0);
             app.EndDate = new DateTime(2017, 4, 6, 14, 00, 0);
-            app.Organizer = new Attendee { DisplayName = "RM", Email = "rainmaker_ho@gss.com.tw" };
+            app.Organizer = new Attendee { DisplayName = "RM", Email = "rm@gss.com.tw" };
             app.Locations = new List<Attendee>{
                 new Attendee{ DisplayName = "協志會議室-舞蝶館",Email = "room_xz_01@gss.com.tw"}
             };
@@ -634,7 +634,7 @@ namespace Zimbra.Client.Test
             //需要先取得 invId 不然測試會失敗
             param.Id = "32412-32411";
             param.Organizer = new Attendee {Email = "alice_lai@gss.com.tw"};
-            param.Replier = new Attendee { Email = "rainmaker_ho@gss.com.tw" };
+            param.Replier = new Attendee { Email = "rm@gss.com.tw" };
             param.Verb = SendInviteReplyRequestParam.ReplyVerbs.DECLINE;
 
             ZmailRequest.ApiRequest = new SendInviteReplyRequest(param);
@@ -699,7 +699,7 @@ namespace Zimbra.Client.Test
             app.Subject = " 到小琉球玩 ";
             app.StartDate = new DateTime(2017, 6, 4, 14, 0, 0);
             app.EndDate = new DateTime(2017, 6, 4, 15, 00, 0);
-            app.Organizer = new Attendee { DisplayName = "RM", Email = "rainmaker_ho@gss.com.tw" };
+            app.Organizer = new Attendee { DisplayName = "RM", Email = "rm@gss.com.tw" };
             app.Locations = new List<Attendee>{
                 new Attendee{ DisplayName = "協志會議室-舞蝶館",Email = "room_xz_01@gss.com.tw"}
             };

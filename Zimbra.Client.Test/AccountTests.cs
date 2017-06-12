@@ -20,9 +20,9 @@ namespace Zimbra.Client.Test
         [TestInitialize()]
         public void Initialize()
         {
-            ZmailServer = "zmail.gss.com.tw";
+            ZmailServer = "your mail server";
             ZmailServerPort = 443;
-            UserId = "rainmaker_ho@gss.com.tw";
+            UserId = "rm@gss.com.tw";
             Pwd = "your pwd";
             AssignUserToken();
         }

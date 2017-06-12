@@ -120,7 +120,7 @@ namespace zimbraClientTest
 
         static void InitDispatcher()
         {
-            _ZmailDispatcher = new Dispatcher("zmail.gss.com.tw", 443, true, true);
+            _ZmailDispatcher = new Dispatcher("yourmail", 443, true, true);
         }
 
         static void GetToken(string userId, string pwd)
