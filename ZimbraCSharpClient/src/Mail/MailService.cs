@@ -167,6 +167,7 @@ namespace Zimbra.Client.Mail
 	    public static String A_NEED_EXP = "needExp";
 	    public static String A_ZIMBRA_ID = "zid";
 	    public static String A_REMOTE_ID = "rid";
+	    public static String A_DURATION = "dur";
 
         //values ...
         public static String V_METTING_PARENT_FOLDER_ID = "10";

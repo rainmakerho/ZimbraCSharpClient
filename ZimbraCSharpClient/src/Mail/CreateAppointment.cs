@@ -100,7 +100,7 @@ namespace Zimbra.Client.src.Mail
             }
 
             //Resource 車、投影機 ...
-            foreach (var resource in appointment.Attendees)
+            foreach (var resource in appointment.Resources)
             {
                 var at = doc.CreateElement(MailService.E_ATTENDEES, MailService.NAMESPACE_URI);
                 at.SetAttribute(MailService.A_ROLE, MailService.V_ROLE_NON);

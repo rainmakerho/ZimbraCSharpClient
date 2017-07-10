@@ -75,12 +75,14 @@ namespace Zimbra.Client.src.Mail
                 var appt = new SearchResult();
                 appt.Name = XmlUtil.AttributeValue(apptNode.Attributes, MailService.A_NAME);
                 appt.Location = XmlUtil.AttributeValue(apptNode.Attributes, MailService.A_LOCATION);
+                appt.Duration = Convert.ToInt64(XmlUtil.AttributeValue(apptNode.Attributes, MailService.A_DURATION));
                 var instNode = apptNode.SelectSingleNode(MailService.NS_PREFIX + ":" + MailService.E_INSTANCE, XmlUtil.NamespaceManager);
                 if (instNode != null)
                 {
                     String s = XmlUtil.AttributeValue(instNode.Attributes, MailService.A_START);
                     Int64 seconds = Int64.Parse(s);
                     appt.StartTime = DateUtil.GmtSecondsToLocalTime(seconds);
+                    appt.EndTime = appt.StartTime.AddMilliseconds(appt.Duration);
                 }
                 appt.ModifySequence = XmlUtil.AttributeValue(apptNode.Attributes, MailService.A_MODIFY_SEQUENCE);
                 appt.InviteMessageId = XmlUtil.AttributeValue(apptNode.Attributes, MailService.A_INV_ID);
@@ -115,10 +117,12 @@ namespace Zimbra.Client.src.Mail
         public string Location { get; set; }
 
         public DateTime StartTime { get; set; }
-
+        
         public Attendee Organizer { get; set; }
 
-        
+        public Int64 Duration { get; set; }
+
+        public DateTime EndTime { get; set; }
 
     }
 
