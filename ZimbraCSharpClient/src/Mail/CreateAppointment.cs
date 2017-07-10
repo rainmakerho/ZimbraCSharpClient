@@ -51,29 +51,29 @@ namespace Zimbra.Client.src.Mail
             comp.SetAttribute(MailService.A_APPT_ALLDAY, MailService.V_ZERO);
             comp.SetAttribute(MailService.A_NAME, appointment.Subject);
            
-                var locations = appointment.Locations.Aggregate<Attendee, string>(string.Empty,
-                (x, y) =>
-                {
-                    var init = x.Length > 0 ? x + MailService.SEMICOLON : x;
-                    init += $"\"{y.DisplayName}\" <{y.Email}>";
-                    return init;
-                });
+            var locations = appointment.Locations.Aggregate<Attendee, string>(string.Empty,
+            (x, y) =>
+            {
+                var init = x.Length > 0 ? x + MailService.SEMICOLON : x;
+                init += $"\"{y.DisplayName}\" <{y.Email}>";
+                return init;
+            });
             
             comp.SetAttribute(MailService.A_LOCATION, $"{locations}" );
 
              
-                //會議室 Location
-                foreach (var attendee in appointment.Locations)
-                {
-                    var loc = doc.CreateElement(MailService.E_ATTENDEES, MailService.NAMESPACE_URI);
-                    loc.SetAttribute(MailService.A_ROLE, MailService.V_ROLE_NON);
-                    loc.SetAttribute(MailService.A_PARTICIPATION_STATUS, MailService.V_PARTICIPATION_STATUS_NE);
-                    loc.SetAttribute(MailService.A_RSVP, MailService.V_TRUE);
-                    loc.SetAttribute(MailService.A_EMAIL, attendee.Email);
-                    loc.SetAttribute(MailService.A_DISPLAY_NAME, attendee.DisplayName);
-                    loc.SetAttribute(MailService.A_CUTYPE, MailService.V_CUTYPE_RES);
-                    comp.AppendChild(loc);
-                }  
+            //會議室 Location
+            foreach (var attendee in appointment.Locations)
+            {
+                var loc = doc.CreateElement(MailService.E_ATTENDEES, MailService.NAMESPACE_URI);
+                loc.SetAttribute(MailService.A_ROLE, MailService.V_ROLE_NON);
+                loc.SetAttribute(MailService.A_PARTICIPATION_STATUS, MailService.V_PARTICIPATION_STATUS_NE);
+                loc.SetAttribute(MailService.A_RSVP, MailService.V_TRUE);
+                loc.SetAttribute(MailService.A_EMAIL, attendee.Email);
+                loc.SetAttribute(MailService.A_DISPLAY_NAME, attendee.DisplayName);
+                loc.SetAttribute(MailService.A_CUTYPE, MailService.V_CUTYPE_RES);
+                comp.AppendChild(loc);
+            }  
             
             
 
@@ -95,7 +95,7 @@ namespace Zimbra.Client.src.Mail
                 at.SetAttribute(MailService.A_RSVP, MailService.V_TRUE);
                 at.SetAttribute(MailService.A_EMAIL, attendee.Email);
                 at.SetAttribute(MailService.A_DISPLAY_NAME, attendee.DisplayName);
-                at.SetAttribute(MailService.A_CUTYPE, MailService.V_CUTYPE_RES);
+                
                 comp.AppendChild(at);
             }
 
@@ -108,6 +108,7 @@ namespace Zimbra.Client.src.Mail
                 at.SetAttribute(MailService.A_RSVP, MailService.V_TRUE);
                 at.SetAttribute(MailService.A_EMAIL, resource.Email);
                 at.SetAttribute(MailService.A_DISPLAY_NAME, resource.DisplayName);
+                at.SetAttribute(MailService.A_CUTYPE, MailService.V_CUTYPE_RES);
                 comp.AppendChild(at);
             }
 
