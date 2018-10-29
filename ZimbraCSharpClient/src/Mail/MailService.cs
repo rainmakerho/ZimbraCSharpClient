@@ -1,4 +1,4 @@
-/*
+﻿/*
  * ***** BEGIN LICENSE BLOCK *****
  * Version: MPL 1.1
  * 
@@ -177,7 +177,8 @@ namespace Zimbra.Client.Mail
 	    public static String V_TRANSP_OPAQUE  = "O";
 	    public static String V_ZERO = "0";
 	    public static String V_ROLE_NON = "NON";
-	    public static String V_ROLE_REQ = "REQ";
+	    public static String V_ROLE_REQ = "REQ"; //參與者
+        public static String V_ROLE_OPT = "OPT";  //可選
 	    public static String V_PARTICIPATION_STATUS_NE = "NE";
 	    public static String V_TRUE = "1";
 	    public static String V_TIMEZONE_TAIPEI = "Asia/Taipei";

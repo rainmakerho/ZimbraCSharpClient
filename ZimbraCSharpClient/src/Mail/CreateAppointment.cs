@@ -10,6 +10,8 @@ using Zimbra.Client.Util;
 
 namespace Zimbra.Client.src.Mail
 {
+    
+
     public class CreateAppointmentRequest : MailServiceRequest
     {
         private AppointmentRequestParams appointment;
@@ -34,6 +36,7 @@ namespace Zimbra.Client.src.Mail
         public override XmlDocument ToXmlDocument()
         {
             if (appointment.Locations == null) appointment.Locations = new List<Attendee>();
+            if (appointment.Resources == null) appointment.Resources = new List<Attendee>();
 
             XmlDocument doc = new XmlDocument();
             XmlElement reqElem = doc.CreateElement(MailService.CREATE_APPT_REQUEST, MailService.NAMESPACE_URI);
@@ -78,19 +81,19 @@ namespace Zimbra.Client.src.Mail
             
 
             //OR
-            var or = doc.CreateElement(MailService.E_ATTENDEES, MailService.NAMESPACE_URI);
-            or.SetAttribute(MailService.A_ROLE, MailService.V_ROLE_REQ);
-            or.SetAttribute(MailService.A_PARTICIPATION_STATUS, MailService.V_PARTICIPATION_STATUS_NE);
-            or.SetAttribute(MailService.A_RSVP, MailService.V_TRUE);
-            or.SetAttribute(MailService.A_EMAIL, appointment.Organizer.Email);
-            or.SetAttribute(MailService.A_DISPLAY_NAME, appointment.Organizer.DisplayName);
-            comp.AppendChild(or);
+            //var or = doc.CreateElement(MailService.E_ATTENDEES, MailService.NAMESPACE_URI);
+            ////or.SetAttribute(MailService.A_ROLE, MailService.V_ROLE_REQ);
+            //or.SetAttribute(MailService.A_PARTICIPATION_STATUS, MailService.V_PARTICIPATION_STATUS_NE);
+            //or.SetAttribute(MailService.A_RSVP, MailService.V_TRUE);
+            //or.SetAttribute(MailService.A_EMAIL, appointment.Organizer.Email);
+            //or.SetAttribute(MailService.A_DISPLAY_NAME, appointment.Organizer.DisplayName);
+            //comp.AppendChild(or);
 
             //參與人員 
             foreach (var attendee in appointment.Attendees)
             {
                 var at = doc.CreateElement(MailService.E_ATTENDEES, MailService.NAMESPACE_URI);
-                at.SetAttribute(MailService.A_ROLE, MailService.V_ROLE_REQ);
+                at.SetAttribute(MailService.A_ROLE, attendee.IsOptional ? MailService.V_ROLE_OPT : MailService.V_ROLE_REQ);
                 at.SetAttribute(MailService.A_PARTICIPATION_STATUS, MailService.V_PARTICIPATION_STATUS_NE);
                 at.SetAttribute(MailService.A_RSVP, MailService.V_TRUE);
                 at.SetAttribute(MailService.A_EMAIL, attendee.Email);
@@ -100,17 +103,20 @@ namespace Zimbra.Client.src.Mail
             }
 
             //Resource 車、投影機 ...
-            foreach (var resource in appointment.Resources)
-            {
-                var at = doc.CreateElement(MailService.E_ATTENDEES, MailService.NAMESPACE_URI);
-                at.SetAttribute(MailService.A_ROLE, MailService.V_ROLE_NON);
-                at.SetAttribute(MailService.A_PARTICIPATION_STATUS, MailService.V_PARTICIPATION_STATUS_NE);
-                at.SetAttribute(MailService.A_RSVP, MailService.V_TRUE);
-                at.SetAttribute(MailService.A_EMAIL, resource.Email);
-                at.SetAttribute(MailService.A_DISPLAY_NAME, resource.DisplayName);
-                at.SetAttribute(MailService.A_CUTYPE, MailService.V_CUTYPE_RES);
-                comp.AppendChild(at);
-            }
+
+                foreach (var resource in appointment.Resources)
+                {
+                    var at = doc.CreateElement(MailService.E_ATTENDEES, MailService.NAMESPACE_URI);
+                    at.SetAttribute(MailService.A_ROLE, MailService.V_ROLE_NON);
+                    at.SetAttribute(MailService.A_PARTICIPATION_STATUS, MailService.V_PARTICIPATION_STATUS_NE);
+                    at.SetAttribute(MailService.A_RSVP, MailService.V_TRUE);
+                    at.SetAttribute(MailService.A_EMAIL, resource.Email);
+                    at.SetAttribute(MailService.A_DISPLAY_NAME, resource.DisplayName);
+                    at.SetAttribute(MailService.A_CUTYPE, MailService.V_CUTYPE_RES);
+                    comp.AppendChild(at);
+                }
+
+            
 
 
             var start = appointment.StartDate;
@@ -126,7 +132,7 @@ namespace Zimbra.Client.src.Mail
             e.SetAttribute(MailService.A_DATE, end.ToString(MailService.DateTimeFormat));
             comp.AppendChild(e);
 
-            or = doc.CreateElement(MailService.E_ORGANIZER, MailService.NAMESPACE_URI);
+            var or = doc.CreateElement(MailService.E_ORGANIZER, MailService.NAMESPACE_URI);
             or.SetAttribute(MailService.A_EMAIL, appointment.Organizer.Email);
             or.SetAttribute(MailService.A_DISPLAY_NAME, appointment.Organizer.DisplayName);
             comp.AppendChild(or);
@@ -281,6 +287,8 @@ namespace Zimbra.Client.src.Mail
 
         //Calendar user type
         public string UserType { get; set; }
+
+        public bool IsOptional { get; set; } = false;
     }
 
     public class AppointmentRequestParams
@@ -312,5 +320,6 @@ namespace Zimbra.Client.src.Mail
         public string Timezone { get; set; }
 
         public int AlarmMinutes { get; set; }
+        
     }
 }
